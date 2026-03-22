@@ -254,9 +254,9 @@ DATA = {
 }
 }
 # --- الدوال المساعدة ---
-
 def kb(options, back=True):
     opts = list(options)
+    # ترتيب الأزرار في صفوف (كل صف فيه زرين)
     rows = [opts[i:i+2] for i in range(0, len(opts), 2)]
     if back:
         rows.append(["⬅️ رجوع", "🏠 الرئيسية"])
@@ -265,90 +265,75 @@ def kb(options, back=True):
 def get_node(path):
     node = DATA
     for p in path:
+        # التأكد أن المفتاح موجود لتجنب انهيار البوت
         if isinstance(node, dict) and p in node:
             node = node[p]
         else:
-            return DATA
+            return DATA # العودة للبداية في حال حدوث خطأ
     return node
 
-async def check_sub(user_id, context):
-    """التحقق من الاشتراك في القناة"""
-    try:
-        member = await context.bot.get_chat_member(chat_id=CHANNEL_ID, user_id=user_id)
-        return member.status in ["member", "administrator", "creator"]
-    except:
-        return False
-
-# --- معالجات الأوامر ---
-
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    uid = update.effective_user.id
-    user_path[uid] = []
-    
-    # رسالة الترحيب
-    welcome_text = (
-        "🌹 دعوة في ظهر الغيب هي كل ما نرجوه.\n\n"
-        "الغاية من هذا البوت هي تسهيل وصولكم للملفات الأكاديمية بسرعة ويسر.\n\n"
-        "📢 يرجى الاشتراك في قناة الدفعة لمتابعة التحديثات:\n"
-        "👉 https://t.me/It_2028"
-    )
-
-    if not await check_sub(uid, context):
-        await update.message.reply_text(f"⚠️ يجب عليك الاشتراك في القناة أولاً:\n{CHANNEL_ID}")
-        return
-
-    await update.message.reply_text(welcome_text, reply_markup=kb(DATA.keys(), False))
+    user_path[update.effective_user.id] = []
+    await update.message.reply_text("أهلاً بك، اختر السنة:", reply_markup=kb(DATA.keys(), False))
 
 async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     uid = update.effective_user.id
     text = update.message.text
     
-    # قفل الاشتراك الإجباري
-    if not await check_sub(uid, context):
-        await update.message.reply_text(f"⚠️ عذراً، يجب الاشتراك في القناة أولاً لتتمكن من استخدام البوت:\n{CHANNEL_ID}")
-        return
-
+    # التأكد أن المستخدم مسجل في الذاكرة، وإلا نبدأ من البداية
     if uid not in user_path:
         user_path[uid] = []
     
     path = user_path[uid]
 
+    # العودة للرئيسية
     if text == "🏠 الرئيسية":
         user_path[uid] = []
         await update.message.reply_text("الرئيسية", reply_markup=kb(DATA.keys(), False))
         return
 
+    # العودة للخلف
     if text == "⬅️ رجوع":
-        if path: path.pop()
+        if path:
+            path.pop()
         node = get_node(path)
-        await update.message.reply_text("رجوع", reply_markup=kb(node.keys(), len(path) != 0))
+        is_main = len(path) == 0
+        await update.message.reply_text("رجوع", reply_markup=kb(node.keys(), not is_main))
         return
 
     node = get_node(path)
 
+    # إذا كانت القائمة الحالية عبارة عن تصنيفات (أزرار)
     if isinstance(node, dict):
         if text in node:
             path.append(text)
             new_node = node[text]
-            if isinstance(new_node, list):
-                await update.message.reply_text("اختر الملف:", reply_markup=kb([n for n, _ in new_node]))
-            else:
+
+            if isinstance(new_node, list): # إذا وصلنا لقائمة الملفات
+                await update.message.reply_text("اختر الملف لتحميله:", reply_markup=kb([n for n, _ in new_node]))
+            else: # إذا دخلنا في تصنيف فرعي آخر
                 await update.message.reply_text(f"تم اختيار {text}:", reply_markup=kb(new_node.keys()))
         else:
-            await update.message.reply_text("يرجى الاختيار من الأزرار.")
+            await update.message.reply_text("يرجى اختيار أحد الأزرار الظاهرة.")
 
+    # إذا كانت القائمة الحالية عبارة عن ملفات (إرسال مستند)
     elif isinstance(node, list):
-        file_id = next((f for n, f in node if text == n), None)
+        file_id = None
+        for n, f in node:
+            if text == n:
+                file_id = f
+                break
+        
         if file_id:
             await update.message.reply_document(file_id)
         else:
-            await update.message.reply_text("الملف غير موجود.")
+            await update.message.reply_text("الملف غير موجود، يرجى الاختيار من القائمة.")
 
     user_path[uid] = path
 
-if __name__ == "__main__":
+if name == "main":
     if not TOKEN:
-        print("Error: No TOKEN found!")
+        print("خطأ: لم يتم العثور على TOKEN! أضفه في متغيرات البيئة.")
     else:
         app = ApplicationBuilder().token(TOKEN).build()
         app.add_handler(CommandHandler("start", start))
