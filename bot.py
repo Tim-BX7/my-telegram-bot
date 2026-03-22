@@ -253,10 +253,113 @@ DATA = {
 }
 }
 }
+وصلت الفكرة تماماً. المشكلة في الكود الذي أرسلته هي وجود مسافات مخفية (Indentation) غير صحيحة بسبب النسخ واللصق، بالإضافة إلى أن شرط التشغيل الأخير if name == "main": ينقصه شرطات سفلية ليكون if __name__ == "__main__":.
+
+سأعطيك الكود كاملاً الآن. قم بنسخه من السطر الأول حتى الأخير واستبدل كل شيء في ملفك به.
+
+الكود الكامل والجاهز (انسخ من هنا):
+Python
+import os
+from telegram import Update, ReplyKeyboardMarkup
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
+
+# جلب التوكن ومعرف القناة
+TOKEN = os.getenv("TOKEN")
+CHANNEL_ID = "@It_2028" 
+
+user_path = {}
+
+# هيكلية البيانات (تم دمج الفصل الأول والثاني تحت السنة الثالثة)
+DATA = {
+    "🎓 السنة الثالثة": {
+        "📖 الفصل الأول": {
+            "💻 مواد الفصل الأول": {
+                "📄 النظري": [("مثال للمحاضرة", "FILE_ID_HERE")],
+                "🧪 العملي": [("مثال للجلسة", "FILE_ID_HERE")]
+            }
+        },
+        "📖 الفصل الثاني": {
+            "💻 هندسة البرمجيات": {
+                "📄 النظري": {
+                    "📚 كميت": [
+                        ("هندسة 1", "BQACAgIAAxkBAAIBv2m8QerIa6Rl9ONwAZn2b_0OPEVKAAJIpQACTejhSexyIatCBct4OgQ"),
+                        ("هندسة 2", "BQACAgIAAxkBAAIBwGm8QepaThoaIg8neyQjKnZlZHHuAAJJpQACTejhSQsSUf3wWnmKOgQ"),
+                        ("هندسة 3", "BQACAgIAAxkBAAIBwWm8QepclJJ449tn6QABQK2qlJMrpwACS6UAAk3o4UmeVRBMzzs6XzoE"),
+                        ("هندسة 4", "BQACAgIAAxkBAAIBwmm8QerW30-7Xjlf3NizHS2LI8Z2AAJNpQACTejhSdfPLEVmdFlxOgQ"),
+                        ("هندسة 5", "BQACAgIAAxkBAAIBw2m8QerQn4zgXOtsCXxwRaLbEJnqAAJRpQACTejhScuGrbeK68AeOgQ"),
+                        ("هندسة 6", "BQACAgIAAxkBAAIBxGm8Qeoj2XV1KlSi6mw1S3w9AqIPAAJXpQACTejhSano2eOiS0l7OgQ"),
+                        ("هندسة 7", "BQACAgIAAxkBAAIBxWm8Qeq1BqQfHBhN31RTLCZ5643AAJdpQACTejhSdguUkHhbIYOOgQ"),
+                        ("هندسة 8", "BQACAgIAAxkBAAIBxmm8Qeq0FZpPRa6lI5tGXSbEEzHTAAJfpQACTejhST9TtJ6ZvcGWOgQ"),
+                        ("هندسة 9", "BQACAgIAAxkBAAIBvmm8QeomzHbpqOq9w_z5-VUfjJqkAAJHpQACTejhSTkprNGcsN0eOgQ"),
+                    ],
+                    "📚 غيت": [
+                        ("هندسة 1", "BQACAgIAAxkBAAIBv2m8QerIa6Rl9ONwAZn2b_0OPEVKAAJIpQACTejhSexyIatCBct4OgQ"),
+                        ("هندسة 2", "BQACAgIAAxkBAAIBwGm8QepaThoaIg8neyQjKnZlZHHuAAJJpQACTejhSQsSUf3wWnmKOgQ"),
+                        ("هندسة 3", "BQACAgIAAxkBAAIBwWm8QepclJJ449tn6QABQK2qlJMrpwACS6UAAk3o4UmeVRBMzzs6XzoE"),
+                        ("هندسة 4", "BQACAgIAAxkBAAIBwmm8QerW30-7Xjlf3NizHS2LI8Z2AAJNpQACTejhSdfPLEVmdFlxOgQ"),
+                        ("هندسة 5", "BQACAgIAAxkBAAIBw2m8QerQn4zgXOtsCXxwRaLbEJnqAAJRpQACTejhScuGrbeK68AeOgQ"),
+                        ("هندسة 6", "BQACAgIAAxkBAAIBxGm8Qeoj2XV1KlSi6mw1S3w9AqIPAAJXpQACTejhSano2eOiS0l7OgQ"),
+                        ("هندسة 7", "BQACAgIAAxkBAAIBxWm8Qeq1BqQfHBhN31RTLCZ5643AAJdpQACTejhSdguUkHhbIYOOgQ"),
+                        ("هندسة 8", "BQACAgIAAxkBAAIBxmm8Qeq0FZpPRa6lI5tGXSbEEzHTAAJfpQACTejhST9TtJ6ZvcGWOgQ"),
+                    ]
+                },
+                "🧪 العملي": {
+                    "📚 غيت": [
+                        ("نوطة", "BQACAgIAAxkBAAIBrGm8P5lyTyZMBY1zxUihtiS7UxHwAAI2pQACTejhSWPTkJKB9XcyOgQ"),
+                        ("جلسة 1", "BQACAgIAAxkBAAIBrWm8P5kQCvJW1ixp0ZvbKolVUQE3AAI3pQACTejhSRT2xulNXgABXzoE"),
+                        ("جلسة 2", "BQACAgIAAxkBAAIBrmm8P5k0F_CWnFp71zqJbe1TSGz_AAI5pQACTejhSb2npave4nGDOgQ"),
+                        ("جلسة 3", "BQACAgIAAxkBAAIBr2m8P5kbsgg0TqhMLfYZtrUCW1wfAAI7pQACTejhSZBtDQmSHKUHOgQ"),
+                        ("جلسة 4", "BQACAgIAAxkBAAIBsGm8P5l60H-wO5CwFN7u1b95IiFNAAI8pQACTejhScmtfPYTc8PmOgQ"),
+                        ("جلسة 5", "BQACAgIAAxkBAAIBsWm8P5kJ9AVG9336qFGfSAQlC-JVAAI-pQACTejhST8L_M62VqriOgQ"),
+                        ("جلسة 6", "BQACAgIAAxkBAAIBsmm8P5lV53Kluuw6ngzK8ZghZW5xAAI_pQACTejhSQIkNsusm75WOgQ"),
+                        ("جلسة 7", "BQACAgIAAxkBAAIBs2m8P5nhFZZ1lb0nv8ITRrs-hECaAAJFpQACTejhSQIGQmTIdQ_YOgQ"),
+                    ],
+                    "📚 كميت": [
+                        ("جلسة 1", "BQACAgIAAxkBAAIBo2m8PXWz5S4uYC8l-EN30OUN5EIuAAIipQACTejhSUOHkWE6BPqzOgQ"),
+                        ("جلسة 2", "BQACAgIAAxkBAAIBpGm8PXVbl9BbCJIagXF7wpyaPCUiAAIlpQACTejhSYCFtMKiygilOgQ"),
+                        ("جلسة 3", "BQACAgIAAxkBAAIBpWm8PXXYBt7uaUHEjvwIA3nMjV89AAIupQACTejhSQRh3bI2b3VoOgQ"),
+                        ("جلسة 4", "BQACAgIAAxkBAAIBomm8PXVN6B7Hg8Shq0Mil4GzAAGsJgACIKUAAk3o4UmAM0E_e5PcSjoE"),
+                    ]
+                }
+            },
+            "🧬 نظرية المعلومات": {
+                "📄 النظري": {
+                    "📚 غيت": [
+                        ("معلومات 1", "BQACAgIAAxkBAAIBf2m8OrP14CZrsyWDH126OYlMwo_JAAL9pAACTejhSSmbpqtgxc20OgQ"),
+                        ("معلومات 2", "BQACAgIAAxkBAAIBgGm8OrP_hW3z3YvoSCK8ycNsZuP8AAIBpQACTejhSd_TSbEcDThmOgQ"),
+                        ("معلومات 3", "BQACAgIAAxkBAAIBgWm8OrN_srIkZNV-lzf9X6_CcnEiAAICpQACTejhSbekaapXqUitOgQ"),
+                        ("معلومات 4", "BQACAgIAAxkBAAIBgmm8OrPzD09kTgHhesfpfuS8Dr3tAAIEpQACTejhSaDWNCrWeJoDOgQ"),
+                        ("معلومات 5", "BQACAgIAAxkBAAIBfmm8OrNQOoDYEATNqjohAT3O54-JAAL8pAACTejhSf5HI39K2tSHOgQ"),
+                    ],
+                    "📚 كميت": [
+                        ("معلومات 1", "BQACAgIAAxkBAAIBiGm8OzScknOOEDsKeajy8ekG6_47AAIIpQACTejhSbFAbiFyIDqVOgQ"),
+                        ("معلومات 2", "BQACAgIAAxkBAAIBimm8OzQAAZr1waPBdtkvK5nwCzKQbAACCqUAAk3o4Ul_wjpNV3mv_DoE"),
+                        ("معلومات 3", "BQACAgIAAxkBAAIBi2m8OzQVEw5N_0g14o1KBYddqsOMAAILpQACTejhSY4DHiiMrsnrOgQ"),
+                        ("معلومات 5", "BQACAgIAAxkBAAIBiGm8OzScknOOEDsKeajy8ekG6_47AAIIpQACTejhSbFAbiFyIDqVOgQ"),
+                    ]
+                },
+                "🧪 العملي": {
+                    "📚 غيت": [
+                        ("دورات", "BQACAgIAAxkBAAIBkGm8O2vaJGC7UHAebkulWFLoUqXAAAIMpQACTejhSbOAOmTU4huqOgQ"),
+                        ("جلسة 1+2", "BQACAgIAAxkBAAIBkWm8O2sJ0-HBnSltGuer95iqQ2FEAAIOpQACTejhSSwr77sotWwCOgQ"),
+                        ("جلسة 3+4+5", "BQACAgIAAxkBAAIBkmm8O2sy7dEwVL7-dSIlSntLeT-HAAIPpQACTejhSZP2l8ijqf97OgQ"),
+                    ],
+                    "📚 كميت": [
+                        ("جلسة 1", "BQACAgIAAxkBAAIBl2m8O9sWQvCI3mvi2VQ8qYP2-tt0AAIRpQACTejhSVzXcOOjPEmxOgQ"),
+                        ("جلسة 2", "BQACAgIAAxkBAAIBmGm8O9vFni_7mEK4qYJOSS6RNrgwAAITpQACTejhSWNCDQpFmxxuOgQ"),
+                        ("جلسة 3", "BQACAgIAAxkBAAIBmWm8O9s8Sob1mZFrGZlL71mQuPI8AAIXpQACTejhSVPJYDZDhKUaOgQ"),
+                        ("جلسة 4", "BQACAgIAAxkBAAIBmmm8O9v_yJHI1oE-aJAvQDgUX0Q1AAIYpQACTejhSfCpGmzCe6qrOgQ"),
+                        ("جلسة 5", "BQACAgIAAxkBAAIBlmm8O9vv7BKR5GuaKJS6OrCvAAEtigACEKUAAk3o4Unj9zhUzk5ZkjoE"),
+                    ]
+                }
+            }
+        }
+    }
+}
+
 # --- الدوال المساعدة ---
 def kb(options, back=True):
     opts = list(options)
-    # ترتيب الأزرار في صفوف (كل صف فيه زرين)
     rows = [opts[i:i+2] for i in range(0, len(opts), 2)]
     if back:
         rows.append(["⬅️ رجوع", "🏠 الرئيسية"])
@@ -265,75 +368,91 @@ def kb(options, back=True):
 def get_node(path):
     node = DATA
     for p in path:
-        # التأكد أن المفتاح موجود لتجنب انهيار البوت
         if isinstance(node, dict) and p in node:
             node = node[p]
         else:
-            return DATA # العودة للبداية في حال حدوث خطأ
+            return DATA
     return node
 
+async def check_sub(user_id, context):
+    """التحقق من الاشتراك في القناة"""
+    try:
+        member = await context.bot.get_chat_member(chat_id=CHANNEL_ID, user_id=user_id)
+        return member.status in ["member", "administrator", "creator"]
+    except:
+        return False
+
+# --- معالجات الأوامر ---
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_path[update.effective_user.id] = []
-    await update.message.reply_text("أهلاً بك، اختر السنة:", reply_markup=kb(DATA.keys(), False))
+    uid = update.effective_user.id
+    user_path[uid] = []
+    
+    welcome_text = (
+        "🌹 دعوة في ظهر الغيب هي كل ما نرجوه.\n\n"
+        "الغاية من هذا البوت هي تسهيل وصولكم للملفات الأكاديمية بسرعة ويسر.\n\n"
+        "📢 يرجى الاشتراك في قناة الدفعة لمتابعة التحديثات:\n"
+        "👉 https://t.me/It_2028"
+    )
+
+    if not await check_sub(uid, context):
+        await update.message.reply_text(
+            f"⚠️ عذراً! يجب عليك الاشتراك في القناة أولاً لتتمكن من استخدام البوت:\n{CHANNEL_ID}\n\n"
+            "بعد الاشتراك، أرسل /start مجدداً."
+        )
+        return
+
+    await update.message.reply_text(welcome_text, reply_markup=kb(DATA.keys(), False))
 
 async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     uid = update.effective_user.id
     text = update.message.text
     
-    # التأكد أن المستخدم مسجل في الذاكرة، وإلا نبدأ من البداية
+    # فحص الاشتراك الإجباري عند كل ضغطة
+    if not await check_sub(uid, context):
+        await update.message.reply_text(f"⚠️ يرجى الاشتراك أولاً في القناة: {CHANNEL_ID}")
+        return
+
     if uid not in user_path:
         user_path[uid] = []
     
     path = user_path[uid]
 
-    # العودة للرئيسية
     if text == "🏠 الرئيسية":
         user_path[uid] = []
         await update.message.reply_text("الرئيسية", reply_markup=kb(DATA.keys(), False))
         return
 
-    # العودة للخلف
     if text == "⬅️ رجوع":
-        if path:
-            path.pop()
+        if path: path.pop()
         node = get_node(path)
-        is_main = len(path) == 0
-        await update.message.reply_text("رجوع", reply_markup=kb(node.keys(), not is_main))
+        await update.message.reply_text("رجوع", reply_markup=kb(node.keys(), len(path) != 0))
         return
 
     node = get_node(path)
 
-    # إذا كانت القائمة الحالية عبارة عن تصنيفات (أزرار)
     if isinstance(node, dict):
         if text in node:
             path.append(text)
             new_node = node[text]
-
-            if isinstance(new_node, list): # إذا وصلنا لقائمة الملفات
+            if isinstance(new_node, list):
                 await update.message.reply_text("اختر الملف لتحميله:", reply_markup=kb([n for n, _ in new_node]))
-            else: # إذا دخلنا في تصنيف فرعي آخر
+            else:
                 await update.message.reply_text(f"تم اختيار {text}:", reply_markup=kb(new_node.keys()))
         else:
             await update.message.reply_text("يرجى اختيار أحد الأزرار الظاهرة.")
 
-    # إذا كانت القائمة الحالية عبارة عن ملفات (إرسال مستند)
     elif isinstance(node, list):
-        file_id = None
-        for n, f in node:
-            if text == n:
-                file_id = f
-                break
-        
+        file_id = next((f for n, f in node if text == n), None)
         if file_id:
             await update.message.reply_document(file_id)
         else:
-            await update.message.reply_text("الملف غير موجود، يرجى الاختيار من القائمة.")
+            await update.message.reply_text("الملف غير موجود.")
 
     user_path[uid] = path
 
-if name == "main":
+if __name__ == "__main__":
     if not TOKEN:
-        print("خطأ: لم يتم العثور على TOKEN! أضفه في متغيرات البيئة.")
+        print("خطأ: لم يتم العثور على TOKEN!")
     else:
         app = ApplicationBuilder().token(TOKEN).build()
         app.add_handler(CommandHandler("start", start))
