@@ -253,6 +253,8 @@ DATA = {
 }
 }
 }
+# --- الدوال المساعدة ---
+
 def kb(options, back=True):
     opts = list(options)
     rows = [opts[i:i+2] for i in range(0, len(opts), 2)]
@@ -269,33 +271,43 @@ def get_node(path):
             return DATA
     return node
 
+async def check_sub(user_id, context):
+    """التحقق من الاشتراك في القناة"""
+    try:
+        member = await context.bot.get_chat_member(chat_id=CHANNEL_ID, user_id=user_id)
+        return member.status in ["member", "administrator", "creator"]
+    except:
+        return False
+
+# --- معالجات الأوامر ---
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_path[update.effective_user.id] = []
+    uid = update.effective_user.id
+    user_path[uid] = []
     
+    # رسالة الترحيب
     welcome_text = (
         "🌹 دعوة في ظهر الغيب هي كل ما نرجوه.\n\n"
         "الغاية من هذا البوت هي تسهيل وصولكم للملفات الأكاديمية بسرعة ويسر.\n\n"
         "📢 يرجى الاشتراك في قناة الدفعة لمتابعة التحديثات:\n"
-        "👉 https://t.me/It_2028\n\n"
-        "الآن، اختر السنة الدراسية:"
+        "👉 https://t.me/It_2028"
     )
-    
-    # قمت بإزالة parse_mode مؤقتاً لضمان أن الرسالة ستصل مهما كانت الرموز
-    await update.message.reply_text(
-        welcome_text, 
-        reply_markup=kb(DATA.keys(), False)
-    )
-    
-    await update.message.reply_text(
-        welcome_text, 
-        reply_markup=kb(DATA.keys(), False),
-        parse_mode="Markdown"
-    )
+
+    if not await check_sub(uid, context):
+        await update.message.reply_text(f"⚠️ يجب عليك الاشتراك في القناة أولاً:\n{CHANNEL_ID}")
+        return
+
+    await update.message.reply_text(welcome_text, reply_markup=kb(DATA.keys(), False))
 
 async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     uid = update.effective_user.id
     text = update.message.text
     
+    # قفل الاشتراك الإجباري
+    if not await check_sub(uid, context):
+        await update.message.reply_text(f"⚠️ عذراً، يجب الاشتراك في القناة أولاً لتتمكن من استخدام البوت:\n{CHANNEL_ID}")
+        return
+
     if uid not in user_path:
         user_path[uid] = []
     
@@ -307,11 +319,9 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     if text == "⬅️ رجوع":
-        if path:
-            path.pop()
+        if path: path.pop()
         node = get_node(path)
-        is_main = len(path) == 0
-        await update.message.reply_text("رجوع", reply_markup=kb(node.keys(), not is_main))
+        await update.message.reply_text("رجوع", reply_markup=kb(node.keys(), len(path) != 0))
         return
 
     node = get_node(path)
@@ -320,31 +330,25 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if text in node:
             path.append(text)
             new_node = node[text]
-
             if isinstance(new_node, list):
-                await update.message.reply_text("اختر الملف لتحميله:", reply_markup=kb([n for n, _ in new_node]))
+                await update.message.reply_text("اختر الملف:", reply_markup=kb([n for n, _ in new_node]))
             else:
                 await update.message.reply_text(f"تم اختيار {text}:", reply_markup=kb(new_node.keys()))
         else:
-            await update.message.reply_text("يرجى اختيار أحد الأزرار الظاهرة.")
+            await update.message.reply_text("يرجى الاختيار من الأزرار.")
 
     elif isinstance(node, list):
-        file_id = None
-        for n, f in node:
-            if text == n:
-                file_id = f
-                break
-        
+        file_id = next((f for n, f in node if text == n), None)
         if file_id:
             await update.message.reply_document(file_id)
         else:
-            await update.message.reply_text("الملف غير موجود، يرجى الاختيار من القائمة.")
+            await update.message.reply_text("الملف غير موجود.")
 
     user_path[uid] = path
 
 if __name__ == "__main__":
     if not TOKEN:
-        print("خطأ: لم يتم العثور على TOKEN!")
+        print("Error: No TOKEN found!")
     else:
         app = ApplicationBuilder().token(TOKEN).build()
         app.add_handler(CommandHandler("start", start))
