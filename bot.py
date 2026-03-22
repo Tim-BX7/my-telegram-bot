@@ -273,11 +273,17 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_path[update.effective_user.id] = []
     
     welcome_text = (
-        "🌹 **دعوة في ظهر الغيب هي كل ما نرجوه.**\n\n"
+        "🌹 دعوة في ظهر الغيب هي كل ما نرجوه.\n\n"
         "الغاية من هذا البوت هي تسهيل وصولكم للملفات الأكاديمية بسرعة ويسر.\n\n"
         "📢 يرجى الاشتراك في قناة الدفعة لمتابعة التحديثات:\n"
         "👉 https://t.me/It_2028\n\n"
         "الآن، اختر السنة الدراسية:"
+    )
+    
+    # قمت بإزالة parse_mode مؤقتاً لضمان أن الرسالة ستصل مهما كانت الرموز
+    await update.message.reply_text(
+        welcome_text, 
+        reply_markup=kb(DATA.keys(), False)
     )
     
     await update.message.reply_text(
