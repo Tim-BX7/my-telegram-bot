@@ -256,7 +256,6 @@ DATA = {
 
 def kb(options, back=True):
     opts = list(options)
-    # ترتيب الأزرار في صفوف (كل صف فيه زرين)
     rows = [opts[i:i+2] for i in range(0, len(opts), 2)]
     if back:
         rows.append(["⬅️ رجوع", "🏠 الرئيسية"])
@@ -265,16 +264,14 @@ def kb(options, back=True):
 def get_node(path):
     node = DATA
     for p in path:
-        # التأكد أن المفتاح موجود لتجنب انهيار البوت
         if isinstance(node, dict) and p in node:
             node = node[p]
         else:
-            return DATA # العودة للبداية في حال حدوث خطأ
+            return DATA
     return node
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_path[update.effective_user.id] = []
-    
     welcome_text = (
         "🌹 **دعوة في ظهر الغيب هي كل ما نرجوه.**\n\n"
         "الغاية من هذا البوت هي تسهيل وصولكم للملفات الأكاديمية بسرعة ويسر.\n\n"
@@ -282,29 +279,24 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "👉 https://t.me/It_2028\n\n"
         "الآن، اختر السنة الدراسية:"
     )
-    
     await update.message.reply_text(
         welcome_text, 
         reply_markup=kb(DATA.keys(), False),
-        parse_mode="Markdown" # لجعل الخط عريض وجميل
+        parse_mode="Markdown"
     )
+
 async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     uid = update.effective_user.id
     text = update.message.text
-    
-    # التأكد أن المستخدم مسجل في الذاكرة، وإلا نبدأ من البداية
     if uid not in user_path:
         user_path[uid] = []
-    
     path = user_path[uid]
 
-    # العودة للرئيسية
     if text == "🏠 الرئيسية":
         user_path[uid] = []
         await update.message.reply_text("الرئيسية", reply_markup=kb(DATA.keys(), False))
         return
 
-    # العودة للخلف
     if text == "⬅️ رجوع":
         if path:
             path.pop()
@@ -315,27 +307,19 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     node = get_node(path)
 
-    # إذا كانت القائمة الحالية عبارة عن تصنيفات (أزرار)
     if isinstance(node, dict):
         if text in node:
             path.append(text)
             new_node = node[text]
-
-            if isinstance(new_node, list): # إذا وصلنا لقائمة الملفات
+            if isinstance(new_node, list):
                 await update.message.reply_text("اختر الملف لتحميله:", reply_markup=kb([n for n, _ in new_node]))
-            else: # إذا دخلنا في تصنيف فرعي آخر
+            else:
                 await update.message.reply_text(f"تم اختيار {text}:", reply_markup=kb(new_node.keys()))
         else:
             await update.message.reply_text("يرجى اختيار أحد الأزرار الظاهرة.")
 
-    # إذا كانت القائمة الحالية عبارة عن ملفات (إرسال مستند)
     elif isinstance(node, list):
-        file_id = None
-        for n, f in node:
-            if text == n:
-                file_id = f
-                break
-        
+        file_id = next((f for n, f in node if text == n), None)
         if file_id:
             await update.message.reply_document(file_id)
         else:
@@ -345,7 +329,7 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 if __name__ == "__main__":
     if not TOKEN:
-        print("خطأ: لم يتم العثور على TOKEN! أضفه في متغيرات البيئة.")
+        print("خطأ: لم يتم العثور على TOKEN!")
     else:
         app = ApplicationBuilder().token(TOKEN).build()
         app.add_handler(CommandHandler("start", start))
