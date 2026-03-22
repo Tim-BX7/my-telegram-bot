@@ -330,7 +330,7 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     user_path[uid] = path
 
-if name == "main":
+if __name__ == "__main__":
     if not TOKEN:
         print("خطأ: لم يتم العثور على TOKEN! أضفه في متغيرات البيئة.")
     else:
