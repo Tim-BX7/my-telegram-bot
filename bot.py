@@ -253,7 +253,6 @@ DATA = {
 }
 }
 }
-
 def kb(options, back=True):
     opts = list(options)
     # ترتيب الأزرار في صفوف (كل صف فيه زرين)
@@ -331,7 +330,7 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     user_path[uid] = path
 
-if __name__ == "__main__":
+if name == "main":
     if not TOKEN:
         print("خطأ: لم يتم العثور على TOKEN! أضفه في متغيرات البيئة.")
     else:
