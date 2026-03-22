@@ -274,8 +274,20 @@ def get_node(path):
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_path[update.effective_user.id] = []
-    await update.message.reply_text("أهلاً بك، اختر السنة:", reply_markup=kb(DATA.keys(), False))
-
+    
+    welcome_text = (
+        "🌹 **دعوة في ظهر الغيب هي كل ما نرجوه.**\n\n"
+        "الغاية من هذا البوت هي تسهيل وصولكم للملفات الأكاديمية بسرعة ويسر.\n\n"
+        "📢 يرجى الاشتراك في قناة الدفعة لمتابعة التحديثات:\n"
+        "👉 https://t.me/It_2028\n\n"
+        "الآن، اختر السنة الدراسية:"
+    )
+    
+    await update.message.reply_text(
+        welcome_text, 
+        reply_markup=kb(DATA.keys(), False),
+        parse_mode="Markdown" # لجعل الخط عريض وجميل
+    )
 async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     uid = update.effective_user.id
     text = update.message.text
