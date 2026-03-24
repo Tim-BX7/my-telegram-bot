@@ -8,7 +8,7 @@ from telegram.error import BadRequest
 TOKEN = os.getenv("TOKEN")
 CHANNEL_ID = "@It_2028"  # معرف القناة
 CHANNEL_LINK = "https://t.me/It_2028"
-ADMIN_ID = Oday2_4  # استبدله بـ ID حسابك الخاص لتستطيع عمل الإذاعة
+ADMIN_ID = "Oday2_4"  # استبدله بـ ID حسابك الخاص لتستطيع عمل الإذاعة
 USER_FILE = "users.txt" # ملف لتخزين المستخدمين من أجل الإذاعة
 
 user_path = {}
