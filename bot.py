@@ -319,11 +319,12 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             reply_markup=reply_markup
         )
 
-# 1. أضف هذه الوظيفة فوق قسم (if __name__ == "__main__":)
 async def get_file_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # التحقق أنك أنت الآدمن فقط من يستطيع رؤية الـ ID
     if update.effective_user.id == ADMIN_ID:
         file_id = ""
+        name = "غير معروف"
+        
         if update.message.document:
             file_id = update.message.document.file_id
             name = update.message.document.file_name
@@ -332,7 +333,8 @@ async def get_file_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
             name = "صورة"
         
         if file_id:
-            await update.message.reply_text(f"✅ اسم الملف: {name}\n\n🆔 الـ ID الخاص به:\n`{file_id}`", parse_mode='MarkdownV2')
+            # رسالة بسيطة بدون Markdown لتجنب الأخطاء
+            await update.message.reply_text(f"✅ اسم الملف: {name}\n\n🆔 الـ ID:\n{file_id}")
     else:
         await update.message.reply_text("عذراً، هذا الأمر للمطور فقط.")
 
@@ -416,9 +418,16 @@ if __name__ == "__main__":
         print("خطأ: TOKEN مفقود!")
     else:
         app = ApplicationBuilder().token(TOKEN).build()
+        
+        # 1. أوامر الشخطات (CommandHandlers)
         app.add_handler(CommandHandler("start", start))
-        app.add_handler(CommandHandler("broadcast", broadcast)) # أمر الإذاعة
-        app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handler))
+        app.add_handler(CommandHandler("broadcast", broadcast))
+        
+        # 2. مستخرج الـ ID (يجب أن يوضع هنا - قبل الـ Handler العام)
         app.add_handler(MessageHandler(filters.Document.ALL | filters.PHOTO, get_file_id))
+        
+        # 3. الـ Handler العام (يجب أن يكون الأخير دائماً)
+        app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handler))
+        
         print("--- BOT IS RUNNING ---")
         app.run_polling()
