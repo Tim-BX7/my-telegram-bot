@@ -319,6 +319,25 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             reply_markup=reply_markup
         )
 
+# 1. أضف هذه الوظيفة فوق قسم (if __name__ == "__main__":)
+async def get_file_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    # التحقق أنك أنت الآدمن فقط من يستطيع رؤية الـ ID
+    if update.effective_user.id == ADMIN_ID:
+        file_id = ""
+        if update.message.document:
+            file_id = update.message.document.file_id
+            name = update.message.document.file_name
+        elif update.message.photo:
+            file_id = update.message.photo[-1].file_id
+            name = "صورة"
+        
+        if file_id:
+            await update.message.reply_text(f"✅ اسم الملف: {name}\n\n🆔 الـ ID الخاص به:\n`{file_id}`", parse_mode='MarkdownV2')
+    else:
+        await update.message.reply_text("عذراً، هذا الأمر للمطور فقط.")
+
+# 2. الآن انزل لأسفل الكود عند تعريف الـ app وأضف السطر التالي:
+# app.add_handler(MessageHandler(filters.Document.ALL | filters.PHOTO, get_file_id))
 async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """أمر خاص بالمطور لإرسال رسالة لكل مستخدمي البوت"""
     if update.effective_user.id != ADMIN_ID:
@@ -400,5 +419,6 @@ if __name__ == "__main__":
         app.add_handler(CommandHandler("start", start))
         app.add_handler(CommandHandler("broadcast", broadcast)) # أمر الإذاعة
         app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handler))
+        app.add_handler(MessageHandler(filters.Document.ALL | filters.PHOTO, get_file_id))
         print("--- BOT IS RUNNING ---")
         app.run_polling()
