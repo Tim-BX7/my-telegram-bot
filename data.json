@@ -1,0 +1,438 @@
+{
+  "🎓 السنة الثالثة": {
+
+    "📖 الفصل الأول": {
+
+      "🖥 نظم التشغيل": {
+
+  "📄 النظري": {
+
+    "📚 كميت": [
+      ["نظم تشغيل 1","BQACAgQAAxkBAAIPcmnFHiqRCdDqCTdQYxhW5jJrSH8XAAJoGwAC_3ooUk4fiXnknYdcOgQ"],
+      ["نظم تشغيل 2","BQACAgQAAxkBAAIPc2nFHipWXhRS9zJN-9sAAfq-QeBT4wACaRsAAv96KFIjuJlzItV9oToE"],
+      ["نظم تشغيل 3","BQACAgQAAxkBAAIPdGnFHipYFsbKd06k5qoeDynHm93_AAJqGwAC_3ooUqRASCgslLkLOgQ"],
+      ["نظم تشغيل 4","BQACAgQAAxkBAAIPdWnFHipJnqXavF1G7bcQUMId_rHOAAJrGwAC_3ooUoVLHqiQAdFvOgQ"],
+      ["نظم تشغيل 5","BQACAgQAAxkBAAIPdmnFHioBYm1JMYT2X1qOlO5_RjuHAAJsGwAC_3ooUuk0Vk0HzFhrOgQ"],
+      ["نظم تشغيل 6","BQACAgQAAxkBAAIPd2nFHipThxWV0nQUZDWqQFXVL0i_AAJtGwAC_3ooUno5zzDVOwoOOgQ"],
+      ["نظم تشغيل 7","BQACAgQAAxkBAAIPeGnFHioFGq1eR_XsTn1fnHYawN8sAAJuGwAC_3ooUtnjJWPqOLcYOgQ"],
+      ["نظم تشغيل 8","BQACAgQAAxkBAAIPeWnFHioVBl1p7oosGks1KToFf6qJAAJvGwAC_3ooUv93VE60XRL4OgQ"],
+      ["نظم تشغيل 9","BQACAgQAAxkBAAIPemnFHirS3x_p9pOL2PotfU8G-amGAAJwGwAC_3ooUjOhiJJzyZicOgQ"]
+    ],
+
+    "📚 غيت": [
+      ["نظم تشغيل 1","BQACAgQAAxkBAAIPcWnFHio20kMcltvHW7mO48fh9P8rAAJnGwAC_3ooUni6Yuz5BDM1OgQ"],
+      ["نظم تشغيل 2","BQACAgQAAxkBAAIPcmnFHiqRCdDqCTdQYxhW5jJrSH8XAAJoGwAC_3ooUk4fiXnknYdcOgQ"],
+      ["نظم تشغيل 3","BQACAgQAAxkBAAIPc2nFHipWXhRS9zJN-9sAAfq-QeBT4wACaRsAAv96KFIjuJlzItV9oToE"],
+      ["نظم تشغيل 4","BQACAgQAAxkBAAIPdGnFHipYFsbKd06k5qoeDynHm93_AAJqGwAC_3ooUqRASCgslLkLOgQ"],
+      ["نظم تشغيل 5","BQACAgQAAxkBAAIPdWnFHipJnqXavF1G7bcQUMId_rHOAAJrGwAC_3ooUoVLHqiQAdFvOgQ"],
+      ["نظم تشغيل 6","BQACAgQAAxkBAAIPdmnFHioBYm1JMYT2X1qOlO5_RjuHAAJsGwAC_3ooUuk0Vk0HzFhrOgQ"],
+      ["نظم تشغيل 7","BQACAgQAAxkBAAIPd2nFHipThxWV0nQUZDWqQFXVL0i_AAJtGwAC_3ooUno5zzDVOwoOOgQ"],
+      ["نظم تشغيل 8","BQACAgQAAxkBAAIPeGnFHioFGq1eR_XsTn1fnHYawN8sAAJuGwAC_3ooUtnjJWPqOLcYOgQ"],
+      ["نظم تشغيل 9","BQACAgQAAxkBAAIPeWnFHioVBl1p7oosGks1KToFf6qJAAJvGwAC_3ooUv93VE60XRL4OgQ"],
+      ["نظم تشغيل 10","BQACAgQAAxkBAAIPemnFHirS3x_p9pOL2PotfU8G-amGAAJwGwAC_3ooUjOhiJJzyZicOgQ"]
+    ]
+
+  },
+
+  "🧪 العملي": {
+
+    "📚 غيت": [],
+    "📚 كميت": []
+
+  }
+
+},
+      "📡 اتصالات رقمية": {
+
+  "📄 النظري": {
+
+    "📚 كميت": [
+      ["اتصالات 1","BQACAgQAAxkBAAIPXmnFHRJ2RBmsP9OWYoZ8iGa9gunOAAJdGwAC_3ooUuAgQlLV2AtlOgQ"],
+      ["اتصالات 2","BQACAgQAAxkBAAIPX2nFHRI0Fr1o5UwfwifyzTOVe2EtAAJeGwAC_3ooUt1Qf9jul5HpOgQ"],
+      ["اتصالات 3","BQACAgQAAxkBAAIPYGnFHRJeDeklCJciKlIB9xRwlrNMAAJfGwAC_3ooUi_RB6b2kvouOgQ"],
+      ["اتصالات 4","BQACAgQAAxkBAAIPYWnFHRIwwDXQY5bCWonNW5t5Hxm4AAJgGwAC_3ooUhCrqfrkMaodOgQ"],
+      ["اتصالات 5","BQACAgQAAxkBAAIPYmnFHRKTAv0QpP1p5aUvcU3FMKhBAAJhGwAC_3ooUoLZZ99ok4J9OgQ"],
+      ["اتصالات 6","BQACAgQAAxkBAAIPXWnFHRJ2Mg45SAKGoj_K7FEJAxeOAAJcGwAC_3ooUhUeJBlebxmhOgQ"]
+    ],
+
+    "📚 غيت": [
+      ["اتصالات 1","BQACAgQAAxkBAAIPa2nFHT60z2pmkJBhJxwFEKCWK9RgAAJkGwAC_3ooUiUIepoRiKy6OgQ"],
+      ["اتصالات 2","BQACAgQAAxkBAAIPaWnFHT79i2cxWJObf3I_D4drlJzxAAJiGwAC_3ooUobcFqivR2g8OgQ"],
+      ["اتصالات 3","BQACAgQAAxkBAAIPamnFHT4k7zz07olgtMul7gdhE-xqAAJjGwAC_3ooUiVLLEXkYQUuOgQ"],
+      ["اتصالات 4","BQACAgQAAxkBAAIPbGnFHT53i_lt7apz--c5kE0PfOEgAAJlGwAC_3ooUmcs-oBFe_sKOgQ"]
+    ]
+
+  },
+
+  "🧪 العملي": {
+
+    "📚 غيت": [],
+    "📚 كميت": []
+
+  }
+
+},
+      "🧠 خوارزميات": {
+
+  "📄 النظري": {
+
+    "📚 كميت": [
+      ["خوارزميات 1","BQACAgQAAxkBAAIPLGnFFOYAAYCfSlBz8yxcBmjtbYPP2gACOxsAAv96KFLU3qKsa24NRzoE"],
+      ["خوارزميات 2","BQACAgQAAxkBAAIPLWnFFOZ73lOj3F_P47WHICjjveHmAAI8GwAC_3ooUni9GfNdimPHOgQ"],
+      ["خوارزميات 3","BQACAgQAAxkBAAIPLmnFFOY4zVSk-1xV9_IVbdFiV9nKAAI9GwAC_3ooUlBf3DbxttVtOgQ"],
+      ["خوارزميات 4","BQACAgQAAxkBAAIPL2nFFOY_nodcNZdi8pGfuU9BjT8tAAI-GwAC_3ooUmKovdes8jG0OgQ"],
+      ["خوارزميات 5","BQACAgQAAxkBAAIPMGnFFOY6HAQY4l_PtTnqNgaYQzVBAAI_GwAC_3ooUjAkhzvW62GGOgQ"],
+      ["خوارزميات 6","BQACAgQAAxkBAAIPMWnFFOarYw3tFn8dTXFlU3zx8Y9HAAJAGwAC_3ooUjQx_dATgfFFOgQ"],
+      ["خوارزميات 7","BQACAgQAAxkBAAIPMmnFFOYsoEy9ouPHYiulUC_5AtetAAJBGwAC_3ooUi0_PoKL-mTvOgQ"],
+      ["خوارزميات 8","BQACAgQAAxkBAAIPM2nFFOblWRA_DIrjwGsBgbrsHAGEAAJCGwAC_3ooUt_8atflzR8GOgQ"],
+      ["خوارزميات 9","BQACAgQAAxkBAAIPNGnFFOY9P5IXLN5V7Ux_VKIQ9OzjAAJDGwAC_3ooUhJGTLrNASCFOgQ"],
+      ["خوارزميات 10","BQACAgQAAxkBAAIPK2nFFOaQrxatfHkenb6gXHjuOFbdAAI6GwAC_3ooUjeSsAtRMNpbOgQ"]
+    ],
+
+    "📚 غيت": [
+      ["خوارزميات 1","BQACAgQAAxkBAAIPQWnFFiOsmz5J5hNSa71IzLJ_X4fPAAJJGwAC_3ooUoi5gX-dHFbaOgQ"],
+      ["خوارزميات 2","BQACAgQAAxkBAAIPQmnFFiP9MVeycDe3RSy8dL7V1VWfAAJKGwAC_3ooUo0ISyecYV7kOgQ"],
+      ["خوارزميات 3","BQACAgQAAxkBAAIPQ2nFFiMEvOJizrS7enhoNh52i_qSAAJLGwAC_3ooUvU6-nnrKo7qOgQ"],
+      ["خوارزميات 4","BQACAgQAAxkBAAIPRGnFFiPZ07EC6ht1HQaR1R4xj_1SAAJMGwAC_3ooUpJrgPuKNWQvOgQ"],
+      ["خوارزميات 5","BQACAgQAAxkBAAIPRWnFFiMPnMGI3DJ1NPYoK65DHKrxAAJNGwAC_3ooUtR4bCyzgaliOgQ"],
+      ["خوارزميات 6","BQACAgQAAxkBAAIPRmnFFiNgt95FQQ_tSSbrNmSKWWNAAAJOGwAC_3ooUo1U6telWlY-OgQ"],
+      ["خوارزميات 7","BQACAgQAAxkBAAIPR2nFFiOIAAHybS7WDNhHwNZqWNDzsgACTxsAAv96KFImWyMrwW7AWDoE"],
+      ["خوارزميات 8","BQACAgQAAxkBAAIPSGnFFiNADu9n_creYiebF8NMQheKAAJQGwAC_3ooUkaIvmBeqUvGOgQ"],
+      ["خوارزميات 9","BQACAgQAAxkBAAIPU2nFFky1zPt4RP_u-MHm3Id6cVLJAAJSGwAC_3ooUp4LoA4SqMvGOgQ"],
+      ["خوارزميات 10","BQACAgQAAxkBAAIPQGnFFiOlIr-n_dKXp7m2JhJuGNKpAAJHGwAC_3ooUifWNBCN37rJOgQ"],
+      ["خوارزميات 11","BQACAgQAAxkBAAIPP2nFFiOTPup9pGDjy7_4NAyeoqZuAAJGGwAC_3ooUjs34ypn4DgGOgQ"]
+    ]
+
+  },
+
+  "🧪 العملي": {
+
+    "📚 غيت": [],
+    "📚 كميت": []
+
+  }
+
+},
+      "🔌 دارات منطقية": {
+
+  "📄 النظري": {
+
+    "📚 كميت": [
+      ["منطقية 1","BQACAgQAAxkBAAIO9GnFDAHxwveszd4c5zIcSai4msk7AAIjGwAC_3ooUjri0xxY3XZXOgQ"],
+      ["منطقية 2","BQACAgQAAxkBAAIO9WnFDAF4TCNYEgrmqaxXl9r3lFeUAAIkGwAC_3ooUgK9tsx55GnyOgQ"],
+      ["منطقية 3","BQACAgQAAxkBAAIO9mnFDAHTF7C5ggEle2d0QSsouzG6AAIlGwAC_3ooUtKq5LHQ8tc8OgQ"],
+      ["منطقية 4","BQACAgQAAxkBAAIO92nFDAE0ggag54gScqz0yqYqwp3UAAImGwAC_3ooUlM5TP69hpIkOgQ"],
+      ["منطقية 5","BQACAgQAAxkBAAIO82nFDAFESQlpUsmr66ZRnLoDnzcQAAIiGwAC_3ooUgoHlTm-Q6LDOgQ"]
+    ],
+
+    "📚 غيت": [
+      ["منطقية 1","BQACAgQAAxkBAAIPCGnFEPHSEavcWU36b-XvNQ57kTm5AAIpGwAC_3ooUucIGBIjffO2OgQ"],
+      ["منطقية 2","BQACAgQAAxkBAAIPCWnFEPHd7PETs5GxMCkPdsSKxiquAAIsGwAC_3ooUuyCjvU2IANGOgQ"],
+      ["منطقية 3","BQACAgQAAxkBAAIPCmnFEPH_cRpQ0mL4MecLVCa1w1Q3AAIuGwAC_3ooUnBef3gk4el1OgQ"],
+      ["منطقية 4","BQACAgQAAxkBAAIPC2nFEPHKvXFqd513xQEs-1FAFg-WAAIvGwAC_3ooUmZrUXsZEf9OOgQ"],
+      ["منطقية 5","BQACAgQAAxkBAAIPDGnFEPGH1QebRRFdos6P8JtGdA9iAAIxGwAC_3ooUmPFSuQkpz4sOgQ"],
+      ["منطقية 6","BQACAgQAAxkBAAIPB2nFEPFDoe-m9VjnubM3xR8CiYY1AAIoGwAC_3ooUs4SoxSjSjH2OgQ"]
+    ]
+
+  },
+
+  "🧪 العملي": {
+
+    "📚 غيت": [
+      ["جلسة 1","BQACAgQAAxkBAAIPFGnFEbMU7hmlZ5D7VKG5Ecp-nSRNAAIzGwAC_3ooUnqfjzXfCWyeOgQ"],
+      ["جلسة 2+3","BQACAgQAAxkBAAIPFWnFEbNF7YyvQ-MMJr_hRV0G2HM1AAI0GwAC_3ooUkZY861Hc7HLOgQ"],
+      ["جلسة 4","BQACAgQAAxkBAAIPFmnFEbOUWlSAgNJdiHpXNaDJ2hPmAAI1GwAC_3ooUmcstfrf1YblOgQ"],
+      ["جلسة 5","BQACAgQAAxkBAAIPF2nFEbO55guBwpVUdTWMEMz4OYwJAAI2GwAC_3ooUob5zQwTRszIOgQ"],
+      ["جلسة 6","BQACAgQAAxkBAAIPE2nFEbOAFEgsHIxjyCisnufzPXxnAAIyGwAC_3ooUpUwU9g0TM-VOgQ"]
+    ],
+
+    "📚 كميت": [
+      ["جلسة 1","BQACAgQAAxkBAAIPHmnFEc3uN81p2LWMEgMPY9wqmdkfAAI4GwAC_3ooUkELAgpD_wHTOgQ"],
+      ["جلسة 2+3","BQACAgQAAxkBAAIPH2nFEc2HU6vN8-5sBtxUAAEHbPqyoAACORsAAv96KFL9IOpiO3DPizoE"],
+      ["جلسة 4+5","BQACAgQAAxkBAAIPHWnFEc2e9vDuUfj2hV3TKNKROHh8AAI3GwAC_3ooUqmzrmJoJ4-9OgQ"]
+    ]
+
+  }
+
+},
+      "🧮 نظرية الحوسبة": {
+
+  "📄 النظري": {
+
+    "📚 كميت": [
+      ["حوسبة 1","BQACAgQAAxkBAAIOnmnFB0tzZDjQhNNZ4L6p1HfIH2CVAAL_GgAC_3ooUtf5yKs3vXM7OgQ"],
+      ["حوسبة 2","BQACAgQAAxkBAAIOn2nFB0s4faV-U5cZPU79V_JBzEHeAAMbAAL_eihS2lcSD2PJ7mM6BA"],
+      ["حوسبة 3","BQACAgQAAxkBAAIOoGnFB0vyf6LWBZXb8yFvoikWTrL9AAIBGwAC_3ooUnKT6YQfgqqOOgQ"],
+      ["حوسبة 4","BQACAgQAAxkBAAIOoWnFB0tDl8bWm9zqA-Mg6X0-IkMeAAICGwAC_3ooUtqw5cLqO0V1OgQ"],
+      ["حوسبة 5","BQACAgQAAxkBAAIOomnFB0vG1zkJ3zkKEIDBpeNQxCSsAAIDGwAC_3ooUmUGLtWjrAWKOgQ"],
+      ["حوسبة 6","BQACAgQAAxkBAAIOo2nFB0tGuN7k_YfY_yrcc2ESzLg6AAIEGwAC_3ooUsu55PasAqeQOgQ"],
+      ["حوسبة 7","BQACAgQAAxkBAAIOpGnFB0uhfFcBsq_EktWr_vR22KaYAAIGGwAC_3ooUvtfn7AFQrm2OgQ"],
+      ["حوسبة 8","BQACAgQAAxkBAAIOnWnFB0uIWbpDZSLe1aK_CjBeE27oAAL-GgAC_3ooUsmJrITq1HsPOgQ"]
+    ],
+
+    "📚 غيت": [
+      ["حوسبة 1","BQACAgQAAxkBAAIOrmnFCCj8xZLDWHb4N0nVXMNRkyK2AAIIGwAC_3ooUiTNXwTUhgUiOgQ"],
+      ["حوسبة 2","BQACAgQAAxkBAAIOr2nFCCipxP-ErSXU0zT7XQIx-O9TAAIJGwAC_3ooUiAENRrAEGizOgQ"],
+      ["حوسبة 4","BQACAgQAAxkBAAIOsGnFCCi19-ewvG7OsS4o2PFrvvjqAAIKGwAC_3ooUnM-aWoijQiXOgQ"],
+      ["حوسبة 5","BQACAgQAAxkBAAIOsWnFCChzfaP_Nr6LH9k0HWpB9VP2AAILGwAC_3ooUhVqzyWkgPItOgQ"],
+      ["حوسبة 6","BQACAgQAAxkBAAIOsmnFCCi6R3B2thi-F3X04idtEAI4AAIMGwAC_3ooUlz1bgHBd_J9OgQ"],
+      ["حوسبة 7","BQACAgQAAxkBAAIOs2nFCCgdRh_8Ohsltdw7sxQUyZZNAAINGwAC_3ooUsU3mpY7dnnfOgQ"],
+      ["حوسبة 8","BQACAgQAAxkBAAIOtGnFCCi01iG1QPbYmk9MV54PQ2-4AAIOGwAC_3ooUo310TUJgP36OgQ"],
+      ["حوسبة 9","BQACAgQAAxkBAAIOrWnFCCg4RXOPgQoI58Tex9F_gDdzAAIHGwAC_3ooUg0se4t4bDsFOgQ"]
+    ]
+
+  },
+
+  "🧪 العملي": {
+
+    "📚 كميت": [
+      ["جلسة 1","BQACAgQAAxkBAAIOzGnFCpF_QnbEXvf5ASeXystbfk8pAAIRGwAC_3ooUpGGzzmuoIU3OgQ"],
+      ["جلسة 2","BQACAgQAAxkBAAIOzWnFCpE-Bf1vSWXtvtzKRhGhXeqWAAISGwAC_3ooUvsCCpM_Zn48OgQ"],
+      ["جلسة 3","BQACAgQAAxkBAAIOzmnFCpHXocB--m1G5N-AdRwh83rSAAITGwAC_3ooUhzOaiucE7FmOgQ"],
+      ["جلسة 4","BQACAgQAAxkBAAIOz2nFCpG-NOwXkox9CS88x0PGmtkEAAIUGwAC_3ooUmByjM3FfJhDOgQ"],
+      ["جلسة 5","BQACAgQAAxkBAAIO0GnFCpF-u2BOHmqFChoW_-3YtZxiAAIVGwAC_3ooUndko12vnv06OgQ"],
+      ["جلسة 6","BQACAgQAAxkBAAIO0WnFCpFFmWpgsBqZ7ck30dM51zbsAAIWGwAC_3ooUsMY_EI-_nxpOgQ"],
+      ["جلسة 7","BQACAgQAAxkBAAIO0mnFCpEnRCD-pqnuSGAGYWMyUMYsAAIXGwAC_3ooUu5vqc9J4HYEOgQ"],
+      ["جلسة 8","BQACAgQAAxkBAAIO02nFCpHzEEvLFx8oGbZ3zsLOFIX_AAIYGwAC_3ooUnn2sOec5urtOgQ"],
+      ["جلسة 9","BQACAgQAAxkBAAIO1GnFCpEhAnBSVMpJuDRCgbUg_bsAAxkbAAL_eihSyPx5Svk4smY6BA"],
+      ["جلسة 10","BQACAgQAAxkBAAIOy2nFCpFz5rFcSQ7ouDNDrBpEbAbxAAIQGwAC_3ooUhO3k4qrCG6JOgQ"]
+    ],
+
+    "📚 غيت": [
+      ["جلسة 1","BQACAgQAAxkBAAIO5GnFC1Tg6_oJrZ1Jf7NdobMkdgHKAAIbGwAC_3ooUrKJF-UserDkOgQ"],
+      ["جلسة 2","BQACAgQAAxkBAAIO5WnFC1R1T94CmapYmlgIXgg9Rm2QAAIcGwAC_3ooUrMz9gfK4TwnOgQ"],
+      ["جلسة 3","BQACAgQAAxkBAAIO5mnFC1SaFqRqVBiJnWVTRikBQqgfAAIdGwAC_3ooUgI3gfuKuiaeOgQ"],
+      ["جلسة 4","BQACAgQAAxkBAAIO52nFC1T1Qtg2Ueg-H49BFFmXQG31AAIeGwAC_3ooUlpjtgfeGP1DOgQ"],
+      ["جلسة 5","BQACAgQAAxkBAAIO6GnFC1Sc-xF85C8YE4-Gc9B5kSMVAAIfGwAC_3ooUk7HxNiI_b6XOgQ"],
+      ["جلسة 6","BQACAgQAAxkBAAIO6WnFC1RHGJkT72wxbOSkV5lb1U5MAAIgGwAC_3ooUvG5NJz3zBrtOgQ"],
+      ["جلسة 7","BQACAgQAAxkBAAIO6mnFC1RBGzj3ESt28DXk0Lqjm8XXAAIhGwAC_3ooUp_bojAI75Z7OgQ"],
+      ["جلسة 8","BQACAgQAAxkBAAIO42nFC1QgQB5IOBqxryvfuRAlAAFkwAACGhsAAv96KFIoRoMj2apIiDoE"]
+    ]
+
+  }
+
+},
+      "🗣 مهارات تواصل": {
+
+  "📝 أسئلة أتمتة": [
+    ["أتمتة 50","BQACAgQAAxkBAAIPqGnFNbn7VwwJO7kusdpXveB_lCPnAAKJGwAC_3ooUus0mSpMfqnUOgQ"],
+    ["أتمتة 100","BQACAgQAAxkBAAIPp2nFNbkgW4BnXXlLY0aPF_9NlQINAAKIGwAC_3ooUt4C4LCytnOfOgQ"],
+    ["أتمتة 150","BQACAgQAAxkBAAIPrWnFNbn1NjK-_hDjEImaUccW8tqgAAKOGwAC_3ooUsh_wm43Jx02OgQ"]
+  ],
+
+  "📚 غيت": [
+    ["الجزء 1","BQACAgQAAxkBAAIPqWnFNblEBWWgGryopV1e1rdyvmDzAAKKGwAC_3ooUqgzOusU_LC4OgQ"],
+    ["الجزء 2","BQACAgQAAxkBAAIPq2nFNbkfoHdQkxfJYpSc1hqIvwjNAAKMGwAC_3ooUqG5c7E4wO2nOgQ"],
+    ["الجزء 3","BQACAgQAAxkBAAIPqmnFNbmltUkvRFF_fpdsqZV0kLTsAAKLGwAC_3ooUmt8O5GTDV0xOgQ"],
+    ["دورات","BQACAgQAAxkBAAIPrGnFNbnfss7AopLic9Yq5m2WQEz1AAKNGwAC_3ooUhfk4H8taEM4OgQ"]
+  ]
+
+}
+
+    },
+
+    "📖 الفصل الثاني": {
+
+"🧬 نظرية المعلومات": {
+
+  "📄 النظري": {
+
+    "📚 غيت": [
+      ["معلومات 1","BQACAgIAAxkBAAIBf2m8OrP14CZrsyWDH126OYlMwo_JAAL9pAACTejhSSmbpqtgxc20OgQ"],
+      ["معلومات 2","BQACAgIAAxkBAAIBgGm8OrP_hW3z3YvoSCK8ycNsZuP8AAIBpQACTejhSd_TSbEcDThmOgQ"],
+      ["معلومات 3","BQACAgIAAxkBAAIBgWm8OrN_srIkZNV-lzf9X6_CcnEiAAICpQACTejhSbekaapXqUitOgQ"],
+      ["معلومات 4","BQACAgIAAxkBAAIBgmm8OrPzD09kTgHhesfpfuS8Dr3tAAIEpQACTejhSaDWNCrWeJoDOgQ"],
+      ["معلومات 5","BQACAgIAAxkBAAIBfmm8OrNQOoDYEATNqjohAT3O54-JAAL8pAACTejhSf5HI39K2tSHOgQ"]
+    ],
+
+    "📚 كميت": [
+      ["معلومات 1","BQACAgIAAxkBAAIBiWm8OzSbzt0RJDcnKSwr37JECdfFAAIJpQACTejhSWkfuR9q36tZOgQ"],
+      ["معلومات 2","BQACAgIAAxkBAAIBimm8OzQAAZr1waPBdtkvK5nwCzKQbAACCqUAAk3o4Ul_wjpNV3mv_DoE"],
+      ["معلومات 3","BQACAgIAAxkBAAIBi2m8OzQVEw5N_0g14o1KBYddqsOMAAILpQACTejhSY4DHiiMrsnrOgQ"],
+      ["معلومات 5","BQACAgIAAxkBAAIBiGm8OzScknOOEDsKeajy8ekG6_47AAIIpQACTejhSbFAbiFyIDqVOgQ"]
+    ]
+
+  },
+
+  "🧪 العملي": {
+
+    "📚 غيت": [
+      ["دورات","BQACAgIAAxkBAAIBkGm8O2vaJGC7UHAebkulWFLoUqXAAAIMpQACTejhSbOAOmTU4huqOgQ"],
+      ["جلسة 1+2","BQACAgIAAxkBAAIBkWm8O2sJ0-HBnSltGuer95iqQ2FEAAIOpQACTejhSSwr77sotWwCOgQ"],
+      ["جلسة 3+4+5","BQACAgIAAxkBAAIBkmm8O2sy7dEwVL7-dSIlSntLeT-HAAIPpQACTejhSZP2l8ijqf97OgQ"]
+    ],
+
+    "📚 كميت": [
+      ["جلسة 1","BQACAgIAAxkBAAIBl2m8O9sWQvCI3mvi2VQ8qYP2-tt0AAIRpQACTejhSVzXcOOjPEmxOgQ"],
+      ["جلسة 2","BQACAgIAAxkBAAIBmGm8O9vFni_7mEK4qYJOSS6RNrgwAAITpQACTejhSWNCDQpFmxxuOgQ"],
+      ["جلسة 3","BQACAgIAAxkBAAIBmWm8O9s8Sob1mZFrGZlL71mQuPI8AAIXpQACTejhSVPJYDZDhKUaOgQ"],
+      ["جلسة 4","BQACAgIAAxkBAAIBmmm8O9v_yJHI1oE-aJAvQDgUX0Q1AAIYpQACTejhSfCpGmzCe6qrOgQ"],
+      ["جلسة 5","BQACAgIAAxkBAAIBlmm8O9vv7BKR5GuaKJS6OrCvAAEtigACEKUAAk3o4Unj9zhUzk5ZkjoE"]
+    ]
+
+  }
+
+},
+"🧠 نظرية التعقيد": {
+
+  "📄 النظري": {
+
+    "📚 غيت": [
+      ["تمارين إضافية","BQACAgIAAxkBAAIBZGm8OZ2L0Le6pgAB7c9WR7icvMCqygAC2KQAAk3o4UkAAUbxEUUHNaY6BA"],
+      ["مكثفة امتحانية","BQACAgIAAxkBAAIBZWm8OZ2zuEGgJvMdrQpMLIVyw0inAALjpAACTejhSXx3buWPyspnOgQ"],
+      ["تعقيد 1","BQACAgIAAxkBAAIBZmm8OZ2w7DbUnZdPlLV08XDy99lnAALopAACTejhSSGSbvyP1wQ3OgQ"],
+      ["تعقيد 2","BQACAgIAAxkBAAIBZ2m8OZ17koBwMYrrF5H2ZoHFjxq9AALqpAACTejhSTCTN32Canb5OgQ"],
+      ["تعقيد 3","BQACAgIAAxkBAAIBaGm8OZ09Mcmktv3shWVHJRIF6-rzAALspAACTejhSfJtEpMT2m4lOgQ"],
+      ["تعقيد 4","BQACAgIAAxkBAAIBaWm8OZ2q3LBWqFJYLO_fczfAu3TgAALupAACTejhSfkJ-Or3K_gOOgQ"],
+      ["تعقيد 5","BQACAgIAAxkBAAIBamm8OZ2V3XSraA2FI6GlI4gzBFH5AALvpAACTejhScOleQfnndxfOgQ"],
+      ["تعقيد 6","BQACAgIAAxkBAAIBa2m8OZ1LBypIlXxddMTVbLvMxhgSAALxpAACTejhSb2l5pfpD-w2OgQ"],
+      ["تعقيد 7","BQACAgIAAxkBAAIBbGm8OZ1bbybltq2pKiE8z3HNC0cxAALypAACTejhSesKyY2--WC4OgQ"],
+      ["تعقيد 8","BQACAgIAAxkBAAIBbWm8OZ31E8fkAQ0SVK0XYSPPNQIGAALzpAACTejhSXbmmAGU5KU-OgQ"],
+      ["تعقيد 9","BQACAgIAAxkBAAIBeGm8OjsuOiht8o1yEUiydGAsT8J2AAL1pAACTejhSdzTIiLeHhjuOgQ"],
+      ["تعقيد 10","BQACAgIAAxkBAAIBeWm8Ojt6vpUQe6sBgHGqEgPX6kPWAAL4pAACTejhSZcvXmvL-choOgQ"],
+      ["تعقيد 11","BQACAgIAAxkBAAIBemm8OjvjxDnASxnHAZ12W2QdfrkYAAL7pAACTejhSXibJA2FDUgXOgQ"]
+    ],
+
+    "📚 كميت": [
+      ["محاضرة 1","BQACAgIAAxkBAAIBVGm8N-c-E_OHzyDjxeIe3NocqeliAALEpAACTejhSf1dS2P0JHj5OgQ"],
+      ["محاضرة 2","BQACAgIAAxkBAAIBVWm8N-c3jmee1qDWiQUylgYbgU03AALGpAACTejhSSWmcOd34fg8OgQ"],
+      ["محاضرة 3","BQACAgIAAxkBAAIBVmm8N-eLBOuKxqqcTQXfkhyfvQiuAALIpAACTejhSVD8xx-YplpgOgQ"],
+      ["محاضرة 4","BQACAgIAAxkBAAIBV2m8N-eXfBrx4Kk6X4nGxl57TUHtAALLpAACTejhSaXdDwTGWtCyOgQ"],
+      ["محاضرة 5","BQACAgIAAxkBAAIBWGm8N-ePdmrZaI9vyJy4jkrlZwZDAALOpAACTejhSTpTHgcKE3uROgQ"],
+      ["محاضرة 6","BQACAgIAAxkBAAIBWWm8N-d1MDtfNnFYVH0D-md7_tL6AALRpAACTejhSX94Wh-1wQECOgQ"],
+      ["محاضرة 7","BQACAgIAAxkBAAIBWmm8N-dXfDlNo-tprEXxaQTjLg_iAALTpAACTejhSdL62M8VaqqfOgQ"],
+      ["محاضرة 8","BQACAgIAAxkBAAIBW2m8N-fGB_1EGy2VYlS3hNQ7hn6FAALWpAACTejhSdE7BKitvGnbOgQ"]
+    ]
+
+  }
+
+},
+"🌐 شبكات": {
+
+  "📄 النظري": {
+
+    "📚 غيت": [
+      ["شبكات 1","BQACAgIAAxkBAAIBHmm8NLWNLUWzU1GbZJ_skoJW91nJAAKBpAACTejhSQhOwaYsaMVbOgQ"],
+      ["شبكات 2","BQACAgIAAxkBAAIBH2m8NLVgkrKT4MGmNzwcGYkpyhLvAAKEpAACTejhST0k93BNsFbYOgQ"],
+      ["شبكات 3","BQACAgIAAxkBAAIBIGm8NLW1g-nqbrXaxvQptQSv2xRRAAKIpAACTejhSd1K3zungDKtOgQ"],
+      ["شبكات 4","BQACAgIAAxkBAAIBIWm8NLXR_dkzFg15SR0DqZQPWROoAAKKpAACTejhSYf0W2KLn9ZPOgQ"],
+      ["شبكات 5","BQACAgIAAxkBAAIBImm8NLU3MQ7qLTip-AIRv-BJatmWAAKNpAACTejhSfmkVLY1Gt3TOgQ"],
+      ["شبكات 6","BQACAgIAAxkBAAIBI2m8NLUjszN8RZjnGMj3InIwQf0QAAKPpAACTejhSVaCCNVzgjvsOgQ"],
+      ["شبكات 7","BQACAgIAAxkBAAIBJGm8NLU0p_qCOXwMorIpz1C8atW7AAKRpAACTejhSVCQwQZigLCcOgQ"],
+      ["شبكات 8","BQACAgIAAxkBAAIBJWm8NLVzJTOtLpZThF_Z3Yt0WmVDAAKapAACTejhSTj2ZTf179ebOgQ"],
+      ["شبكات 9","BQACAgIAAxkBAAIBJmm8NLW96YB0UdfVb-me9rq_YQPdAAKepAACTejhSb91L5Cr1zxROgQ"]
+    ],
+
+    "📚 كميت": [
+      ["شبكات 1","BQACAgIAAxkBAAIBMGm8NWg1pmd9tVAUCmGLJ22s0qSRAAKhpAACTejhSR6mL32vPm8QOgQ"],
+      ["شبكات 2","BQACAgIAAxkBAAIBMWm8NWhANCT5jQ1y86TPXrftRCK9AAKipAACTejhSXi7AW5qpOI2OgQ"],
+      ["شبكات 3","BQACAgIAAxkBAAIBMmm8NWgVhdKEQ6jYfjSRHXS2IG1QAAKkpAACTejhSbPwBrGKZt73OgQ"],
+      ["شبكات 4","BQACAgIAAxkBAAIBM2m8NWi-xVVJEn1GY1qR87SFVLp7AAKmpAACTejhSSd9Em0DEs4yOgQ"]
+    ]
+
+  },
+
+  "🧪 العملي": {
+
+    "📚 غيت": [
+      ["عملي 1","BQACAgIAAxkBAAIBOGm8Ne9DWX1Uwbnf8KqVxLR_j0BZAAKopAACTejhSf2kUFsWAdu8OgQ"],
+      ["عملي 2","BQACAgIAAxkBAAIBOWm8Ne_7_o5sloy3SPCNXDjnnrsMAAKqpAACTejhSVrd7FQ-OcEYOgQ"],
+      ["عملي 3","BQACAgIAAxkBAAIBOmm8Ne9WUug11_0UK5MmnR9yd8DyAAKrpAACTejhSSf_HYDhLl_BOgQ"],
+      ["عملي 4","BQACAgIAAxkBAAIBO2m8Ne9PFDKlNBdJU6jJ3JtNA7XPAAKspAACTejhSc7xLDMSqKopOgQ"],
+      ["عملي 5","BQACAgIAAxkBAAIBPGm8Ne8nBie0l--YNS8Y5IrCU7y2AAKtpAACTejhSSWMpj_FoQLoOgQ"],
+      ["عملي 6","BQACAgIAAxkBAAIBPWm8Ne9kP4eshb0uQV4Hs2uBYwWBAAKupAACTejhST1MJtfd25_qOgQ"],
+      ["عملي 7","BQACAgIAAxkBAAIBPmm8Ne-O9HqOYMpRs8I1Mb7C2I3kAAKvpAACTejhSa0h3xW0hoqJOgQ"],
+      ["وايرشارك","BQACAgIAAxkBAAIBRmm8Nl2cScK5QL_mcbS1g1LJWGORAAKwpAACTejhSRpu3ghWwS1hOgQ"]
+    ],
+
+    "📚 كميت": [
+      ["عملي 1","BQACAgIAAxkBAAIBR2m8Nl0jzR99XuIU0zINkHm3c2BuAAKxpAACTejhSW3cATsgnQ6zOgQ"],
+      ["عملي 2","BQACAgIAAxkBAAIBSGm8Nl1z60kKT807OIQ_Z7qPkgkTAAKypAACTejhSRIc-9mBOnSKOgQ"],
+      ["عملي 3","BQACAgIAAxkBAAIBSWm8Nl0q8hF0RJlp8c4ZvKTxfabbAAK0pAACTejhScY3lcXdK9Z3OgQ"],
+      ["عملي 4","BQACAgIAAxkBAAIBSmm8Nl1ykhUdmv7tMkzYJqOvTSEyAAK2pAACTejhSa2KVQoxW2wLOgQ"],
+      ["عملي 5","BQACAgIAAxkBAAIBS2m8Nl1lSrgNtMxFYe4VMq-ZZ6VcAAK4pAACTejhSXdE6DoH-YRIOgQ"],
+      ["عملي 6","BQACAgIAAxkBAAIBTGm8Nl2Rc26dxT1fViPS7tGef4YuAAK7pAACTejhSQ6BnbC1RQ7oOgQ"]
+    ]
+
+  }
+
+},
+"🤖 ذكاء اصطناعي": {
+
+  "📄 النظري": {
+
+    "📚 غيت": [
+      ["نظري 1","BQACAgIAAxkBAAIBBmm8M0HgUT64VI5Wz0WHn3Ua8GrLAAJlpAACTejhSeR5NovD1E-GOgQ"],
+      ["نظري 2","BQACAgIAAxkBAAIBB2m8M0E5OOPFfIUx1HsUnNMdsRofAAJmpAACTejhSRrwjedX6S_DOgQ"],
+      ["نظري 3","BQACAgIAAxkBAAIBCGm8M0GOQvKAq1bjdJrUQL5ryPJtAAJnpAACTejhSX6sqUkVBn81OgQ"],
+      ["نظري 4","BQACAgIAAxkBAAIBCWm8M0G7iJUBBqe_xaGLMJTsOooDAAJqpAACTejhSaBH9GUCuRQaOgQ"],
+      ["نظري 5","BQACAgIAAxkBAAIBCmm8M0FtH64uN6fWKtU7AfyaEn47AAJrpAACTejhSaLemAYZBzWEOgQ"],
+      ["نظري 6","BQACAgIAAxkBAAIBC2m8M0E6lr3pETMkCHbZi4-O0RqCAAJtpAACTejhSaMCTu3tekogOgQ"],
+      ["نظري 7","BQACAgIAAxkBAAIBDGm8M0F43plNxAUVmqHTCo3bhvVoAAJ0pAACTejhSfAcDH2GiTbJOgQ"],
+      ["نظري 8","BQACAgIAAxkBAAIBDWm8M0HrnSWUqDN2-2Qh3aWg1PyIAAJ2pAACTejhSSDtlUCkBmLGOgQ"],
+      ["نظري 9","BQACAgIAAxkBAAIBDmm8M0H7sGoGDabBvXta5zJfI-dsAAJ4pAACTejhSaoLTvvsCwHDOgQ"],
+      ["نظري 10","BQACAgIAAxkBAAIBD2m8M0EENq6PMofGlcrJMB5Qd564AAJ8pAACTejhSZFGeKt2ou9aOgQ"]
+    ],
+
+    "📚 كميت": [
+      ["نظري 1","BQACAgIAAxkBAAP2abww3UIJ_FhC5lXHEjqgP8gBWGUAAlekAAJN6OFJLX3V2pEJojw6BA"],
+      ["نظري 2","BQACAgIAAxkBAAP3abww3fJ5eJEQVf55hyq7hNPc-jcAAlqkAAJN6OFJiQdAFsLd1tc6BA"],
+      ["نظري 4","BQACAgIAAxkBAAP4abww3dqCYIPtIUWKQid0TKt11bwAAl2kAAJN6OFJFgsN4qccBSg6BA"],
+      ["نظري 5","BQACAgIAAxkBAAP5abww3RD81vfKQMlRUZtIfi72rT0AAl6kAAJN6OFJIIzHJ9M3g2s6BA"],
+      ["نظري 6","BQACAgIAAxkBAAP6abww3da1J-LacmoN1Wash_O_4EgAAl-kAAJN6OFJ-Ew4y6HMv4o6BA"],
+      ["تتمة 3","BQACAgIAAxkBAAP7abww3Z-hYrwbu4uBoq5jUBDFY4YAAmCkAAJN6OFJjWGIOrQAAdoxOgQ"]
+    ]
+
+  }
+
+},
+"💻 بنيان الحاسوب": {
+
+  "📄 النظري": {
+
+    "📚 غيت": [
+      ["نظري 1","BQACAgIAAxkBAAPSabwuJ_6-XdYGWxlFibFfMwzyBe8AAiakAAJN6OFJfEBbtgxqty86BA"],
+      ["نظري 2","BQACAgIAAxkBAAPTabwuJ0GDh6z_zCTtSU4nMU_LOqgAAiikAAJN6OFJd1jYecCAd-Q6BA"],
+      ["نظري 3","BQACAgIAAxkBAAPUabwuJ5LDIyKVlG4W94KJFO8g1hEAAiqkAAJN6OFJOq1925tuB306BA"],
+      ["نظري 4","BQACAgIAAxkBAAPVabwuJ75U94V9XiiIe6n1-y7Qz2cAAiykAAJN6OFJC6tlbFvloo06BA"],
+      ["نظري 5","BQACAgIAAxkBAAPWabwuJwF5Zi6vdBt9Xrcu3WT9we0AAi6kAAJN6OFJfT7z5aiMIlU6BA"],
+      ["نظري 6","BQACAgIAAxkBAAPXabwuJ6WpN75a6uhB85cjgr31wHIAAi-kAAJN6OFJLHLBTv4nvIM6BA"]
+    ],
+
+    "📚 كميت": [
+      ["نظري 1","BQACAgIAAxkBAAPJabwtriFBTF6nMvvbuG-7u7EiYHMAAhmkAAJN6OFJB1DellaOQfs6BA"],
+      ["نظري 2","BQACAgIAAxkBAAPKabwtrlGrYJu1CS446WR59otmgCQAAh-kAAJN6OFJwQHnU_sOyrY6BA"],
+      ["نظري 3","BQACAgIAAxkBAAPLabwtrmZUDp3BQcbZfeRlQ2lZm18AAiKkAAJN6OFJght-IZpRnnY6BA"],
+      ["نظري 4","BQACAgIAAxkBAAPMabwtrlMhv63PDLYYk-f8X0P25ZkAAiOkAAJN6OFJTUDTbpN2WSE6BA"]
+    ]
+
+  },
+
+  "🧪 العملي": {
+
+    "📚 غيت": [
+      ["عملي 1","BQACAgIAAxkBAAPeabwvFsF3cf3Q1GGwChZuE_whk7UAAjGkAAJN6OFJSVY2B5DtHmA6BA"],
+      ["عملي 2","BQACAgIAAxkBAAPfabwvFmjeanU9ph6HozbJHjNLNMwAAjKkAAJN6OFJZpgqhlnAS-E6BA"],
+      ["عملي 3","BQACAgIAAxkBAAPgabwvFjyLkvVkqF2sJlPU3UaUhkYAAjakAAJN6OFJWQP-KeLZM_46BA"],
+      ["عملي 4","BQACAgIAAxkBAAPhabwvFiqrzZk61NXumCYTbxoGaxIAAjekAAJN6OFJz9lFwbEItZ46BA"],
+      ["عملي 5","BQACAgIAAxkBAAPiabwvFgGa5K4O82qt6aj7VBGRVAQAAjqkAAJN6OFJwvzov3NPHGA6BA"],
+      ["عملي 6","BQACAgIAAxkBAAPjabwvFj8ejgf3SlZYAAHDRr3QEqN3AAI-pAACTejhSerkhTEznWVpOgQ"]
+    ],
+
+    "📚 كميت": [
+      ["عملي 1+2","BQACAgIAAxkBAAPrabwv8CrI0uL2zosGAAF0it2NDghGAAJApAACTejhSYGAMHY214ewOgQ"],
+      ["عملي 3+4","BQACAgIAAxkBAAPsabwv8GDZowL1KCcMirz0iz0chusAAkSkAAJN6OFJoiOPFROB08k6BA"],
+      ["عملي 5","BQACAgIAAxkBAAPtabwv8KWRGH6qOR4uvqVp2o-4kk0AAkekAAJN6OFJlTxWmMfIElw6BA"],
+      ["عملي 6","BQACAgIAAxkBAAPuabwv8Ao9Xj3TVFp6lOsGcwABrx8sAAJQpAACTejhSUswLC7IsDz6OgQ"],
+      ["تتمة","BQACAgIAAxkBAAP0abww3QABePjNjhTQpjIpfTeUZP6TAAJSpAACTejhSSfcRtyRO1enOgQ"],
+      ["دورات","BQACAgIAAxkBAAP1abww3Q3VmFcNBihXnvJSQzE0CLgAAlOkAAJN6OFJOj6OiUlcGdA6BA"]
+    ]
+
+  }
+
+}
+
+    }
+
+  }
+}
