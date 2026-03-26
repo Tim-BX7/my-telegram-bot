@@ -430,6 +430,51 @@
 
   }
 
+},
+      "💻 هندسة البرمجيات": {
+  "🧪 العملي": {
+    "📚 كميت": [
+      ["جلسة 1", "BQACAgIAAxkBAAIBo2m8PXWz5S4uYC8l-EN30OUN5EIuAAIipQACTejhSUOHkWE6BPqzOgQ"],
+      ["جلسة 2", "BQACAgIAAxkBAAIBpGm8PXVbl9BbCJIagXF7wpyaPCUiAAIlpQACTejhSYCFtMKiygilOgQ"],
+      ["جلسة 3", "BQACAgIAAxkBAAIBpWm8PXXYBt7uaUHEjvwIA3nMjV89AAIupQACTejhSQRh3bI2b3VoOgQ"],
+      ["جلسة 4", "BQACAgIAAxkBAAIBomm8PXVN6B7Hg8Shq0Mil4GzAAGsJgACIKUAAk3o4UmAM0E_e5PcSjoE"]
+    ],
+    "📚 غيت": [
+      ["نوطة", "BQACAgIAAxkBAAIBrGm8P5lyTyZMBY1zxUihtiS7UxHwAAI2pQACTejhSWPTkJKB9XcyOgQ"],
+      ["جلسة 1", "BQACAgIAAxkBAAIBrWm8P5kQCvJW1ixp0ZvbKolVUQE3AAI3pQACTejhSRT2xulNXgABXzoE"],
+      ["جلسة 2", "BQACAgIAAxkBAAIBrmm8P5k0F_CWnFp71zqJbe1TSGz_AAI5pQACTejhSb2npave4nGDOgQ"],
+      ["جلسة 3", "BQACAgIAAxkBAAIBr2m8P5kbsgg0TqhMLfYZtrUCW1wfAAI7pQACTejhSZBtDQmSHKUHOgQ"],
+      ["جلسة 4", "BQACAgIAAxkBAAIBsGm8P5l60H-wO5CwFN7u1b95IiFNAAI8pQACTejhScmtfPYTc8PmOgQ"],
+      ["جلسة 5", "BQACAgIAAxkBAAIBsWm8P5kJ9AVG9336qFGfSAQlC-JVAAI-pQACTejhST8L_M62VqriOgQ"],
+      ["جلسة 6", "BQACAgIAAxkBAAIBsmm8P5lV53Kluuw6ngzK8ZghZW5xAAI_pQACTejhSQIkNsusm75WOgQ"],
+      ["جلسة 7", "BQACAgIAAxkBAAIBs2m8P5nhFZZ1lb0nv8ITRrs-hECaAAJFpQACTejhSQIGQmTIdQ_YOgQ"]
+    ]
+  },
+
+  "📄 النظري": {
+    "📚 كميت": [
+      ["هندسة 1", "BQACAgIAAxkBAAIBv2m8QerIa6Rl9ONwAZn2b_0OPEVKAAJIpQACTejhSexyIatCBct4OgQ"],
+      ["هندسة 2", "BQACAgIAAxkBAAIBwGm8QepaThoaIg8neyQjKnZlZHHuAAJJpQACTejhSQsSUf3wWnmKOgQ"],
+      ["هندسة 3", "BQACAgIAAxkBAAIBwWm8QepclJJ449tn6QABQK2qlJMrpwACS6UAAk3o4UmeVRBMzzs6XzoE"],
+      ["هندسة 4", "BQACAgIAAxkBAAIBwmm8QerW30-7Xjlf3NizHS2LI8Z2AAJNpQACTejhSdfPLEVmdFlxOgQ"],
+      ["هندسة 5", "BQACAgIAAxkBAAIBw2m8QerQn4zgXOtsCXxwRaLbEJnqAAJRpQACTejhScuGrbeK68AeOgQ"],
+      ["هندسة 6", "BQACAgIAAxkBAAIBxGm8Qeoj2XV1KlSi6mw1S3w9AqIPAAJXpQACTejhSano2eOiS0l7OgQ"],
+      ["هندسة 7", "BQACAgIAAxkBAAIBxWm8Qeq1BqQfHBhN31RTLCZ5643AAJdpQACTejhSdguUkHhbIYOOgQ"],
+      ["هندسة 8", "BQACAgIAAxkBAAIBxmm8Qeq0FZpPRa6lI5tGXSbEEzHTAAJfpQACTejhST9TtJ6ZvcGWOgQ"],
+      ["هندسة 9", "BQACAgIAAxkBAAIBvmm8QeomzHbpqOq9w_z5-VUfjJqkAAJHpQACTejhSTkprNGcsN0eOgQ"]
+    ],
+
+    "📚 غيت": [
+      ["هندسة 1", "BQACAgIAAxkBAAIBv2m8QerIa6Rl9ONwAZn2b_0OPEVKAAJIpQACTejhSexyIatCBct4OgQ"],
+      ["هندسة 2", "BQACAgIAAxkBAAIBwGm8QepaThoaIg8neyQjKnZlZHHuAAJJpQACTejhSQsSUf3wWnmKOgQ"],
+      ["هندسة 3", "BQACAgIAAxkBAAIBwWm8QepclJJ449tn6QABQK2qlJMrpwACS6UAAk3o4UmeVRBMzzs6XzoE"],
+      ["هندسة 4", "BQACAgIAAxkBAAIBwmm8QerW30-7Xjlf3NizHS2LI8Z2AAJNpQACTejhSdfPLEVmdFlxOgQ"],
+      ["هندسة 5", "BQACAgIAAxkBAAIBw2m8QerQn4zgXOtsCXxwRaLbEJnqAAJRpQACTejhScuGrbeK68AeOgQ"],
+      ["هندسة 6", "BQACAgIAAxkBAAIBxGm8Qeoj2XV1KlSi6mw1S3w9AqIPAAJXpQACTejhSano2eOiS0l7OgQ"],
+      ["هندسة 7", "BQACAgIAAxkBAAIBxWm8Qeq1BqQfHBhN31RTLCZ5643AAJdpQACTejhSdguUkHhbIYOOgQ"],
+      ["هندسة 8", "BQACAgIAAxkBAAIBxmm8Qeq0FZpPRa6lI5tGXSbEEzHTAAJfpQACTejhST9TtJ6ZvcGWOgQ"]
+    ]
+  }
 }
 
     }
