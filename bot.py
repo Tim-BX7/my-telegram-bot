@@ -10,6 +10,17 @@ TOKEN = os.getenv("TOKEN")
 
 CHANNEL_ID = "@It_2028"
 CHANNEL_LINK = "https://t.me/It_2028"
+async def force_join(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    try:
+        user_id = update.effective_user.id
+        member = await context.bot.get_chat_member(CHANNEL_ID, user_id)
+
+        if member.status in ["member", "administrator", "creator"]:
+            return True
+        else:
+            return False
+    except:
+        return False
 
 ADMIN_ID = 7554028181
 USER_FILE = "users.txt"
@@ -39,6 +50,19 @@ def get_node(path):
     return node
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    joined = await force_join(update, context)
+
+    if not joined:
+        keyboard = InlineKeyboardMarkup([
+            [InlineKeyboardButton("📢 اشترك بالقناة", url=CHANNEL_LINK)]
+        ])
+        await update.message.reply_text(
+            "🚨 لازم تشترك بالقناة أولاً حتى تستخدم البوت",
+            reply_markup=keyboard
+        )
+        return
+
     uid = update.effective_user.id
     user_path[uid] = []
 
@@ -53,8 +77,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         pass
 
     await update.message.reply_text(
-        "🔥 تم تحديث البوت\n"
-        "الرجاء الضغط على القوائم من جديد ❤️",
+        "🔥 تم تحديث البوت\nاختر السنة:",
         reply_markup=kb(DATA.keys(), False)
     )
 async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -107,8 +130,22 @@ async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
     uid = update.effective_user.id
     text = update.message.text
+
+    # 🔴 تحقق الاشتراك الإجباري
+    joined = await force_join(update, context)
+
+    if not joined:
+        keyboard = InlineKeyboardMarkup([
+            [InlineKeyboardButton("📢 اشترك بالقناة", url=CHANNEL_LINK)]
+        ])
+        await update.message.reply_text(
+            "🚨 اشترك بالقناة حتى تستخدم البوت",
+            reply_markup=keyboard
+        )
+        return
     
     # التأكد أن المستخدم مسجل في الذاكرة، وإلا نبدأ من البداية
     if uid not in user_path:
