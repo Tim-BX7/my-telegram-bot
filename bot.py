@@ -39,8 +39,72 @@ def get_node(path):
     return node
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_path[update.effective_user.id] = []
-    await update.message.reply_text("أهلاً بك، اختر السنة:", reply_markup=kb(DATA.keys(), False))
+    uid = update.effective_user.id
+    user_path[uid] = []
+
+    # تسجيل المستخدم للإذاعة
+    try:
+        with open(USER_FILE, "a+") as f:
+            f.seek(0)
+            users = f.read().splitlines()
+            if str(uid) not in users:
+                f.write(str(uid) + "\n")
+    except:
+        pass
+
+    await update.message.reply_text(
+        "🔥 تم تحديث البوت\n"
+        "الرجاء الضغط على القوائم من جديد ❤️",
+        reply_markup=kb(DATA.keys(), False)
+    )
+async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if update.effective_user.id != ADMIN_ID:
+        return
+
+    text = "🔥 تم تطوير البوت\n\nالرجاء الضغط على /start من جديد لتحديث القوائم ❤️"
+
+    if not os.path.exists(USER_FILE):
+        open(USER_FILE, "w").close()
+
+    with open(USER_FILE, "r") as f:
+        users = f.read().splitlines()
+
+    total = len(users)
+    sent = 0
+    failed = 0
+
+    msg = await update.message.reply_text(f"📡 بدء الإذاعة...\n0 / {total}")
+
+    for i, user in enumerate(users, start=1):
+        try:
+            await context.bot.send_message(
+                chat_id=int(user),
+                text=text
+            )
+            sent += 1
+        except:
+            failed += 1
+
+        # تحديث العداد كل 10 مستخدمين
+        if i % 10 == 0 or i == total:
+            try:
+                await msg.edit_text(
+                    f"📡 الإذاعة قيد الإرسال...\n"
+                    f"✅ تم الإرسال: {sent}\n"
+                    f"❌ فشل: {failed}\n"
+                    f"📊 التقدم: {i} / {total}"
+                )
+            except:
+                pass
+
+        await asyncio.sleep(0.06)
+
+    await msg.edit_text(
+        f"✅ انتهت الإذاعة بنجاح\n\n"
+        f"📤 تم الإرسال: {sent}\n"
+        f"🚫 فشل: {failed}\n"
+        f"👥 العدد الكلي: {total}"
+    )
 
 async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     uid = update.effective_user.id
@@ -103,6 +167,7 @@ if __name__ == "__main__":
     else:
         app = ApplicationBuilder().token(TOKEN).build()
         app.add_handler(CommandHandler("start", start))
+        app.add_handler(CommandHandler("bc", broadcast))
         app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handler))
         print("--- BOT IS RUNNING ---")
         app.run_polling()
