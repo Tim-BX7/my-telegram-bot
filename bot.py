@@ -197,6 +197,28 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text("الملف غير موجود، يرجى الاختيار من القائمة.")
 
     user_path[uid] = path
+async def get_file_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    if update.effective_user.id != ADMIN_ID:
+        return
+
+    msg = update.message
+
+    if msg.document:
+        file_id = msg.document.file_id
+        await msg.reply_text(f"📄 file_id:\n{file_id}")
+
+    elif msg.photo:
+        file_id = msg.photo[-1].file_id
+        await msg.reply_text(f"🖼 file_id:\n{file_id}")
+
+    elif msg.video:
+        file_id = msg.video.file_id
+        await msg.reply_text(f"🎥 file_id:\n{file_id}")
+
+    elif msg.audio:
+        file_id = msg.audio.file_id
+        await msg.reply_text(f"🎵 file_id:\n{file_id}")
 
 if __name__ == "__main__":
     if not TOKEN:
@@ -205,6 +227,14 @@ if __name__ == "__main__":
         app = ApplicationBuilder().token(TOKEN).build()
         app.add_handler(CommandHandler("start", start))
         app.add_handler(CommandHandler("bc", broadcast))
+
+# 👇 هذا جديد (لازم تضيفه)
+        app.add_handler(MessageHandler(
+    filters.Document.ALL | filters.PHOTO | filters.VIDEO | filters.AUDIO,
+    get_file_id
+))
+
+        # 👇 هذا خليه مثل ما هو
         app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handler))
         print("--- BOT IS RUNNING ---")
         app.run_polling()
