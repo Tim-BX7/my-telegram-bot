@@ -18,7 +18,6 @@ with open("data.json", "r", encoding="utf-8") as f:
     DATA = json.load(f)
 
 # ========= إضافة زر التواصل مع المطور =========
-# نضيف الزر الجديد للقائمة الرئيسية فقط
 MAIN_MENU_BUTTONS = list(DATA.keys()) + ["📞 تواصل مع المطور"]
 
 # ========= مسار المستخدم داخل القوائم =========
@@ -49,7 +48,6 @@ async def contact_developer(update: Update, context: ContextTypes.DEFAULT_TYPE):
     username = update.effective_user.username or "لا يوجد يوزر"
     first_name = update.effective_user.first_name or ""
     
-    # إنشاء زر للتواصل
     keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton("📩 مراسلة المطور", url=f"https://t.me/{DEVELOPER_USERNAME}")],
         [InlineKeyboardButton("💬 إرسال رسالة مباشرة", url=f"tg://user?id={ADMIN_ID}")]
@@ -65,7 +63,6 @@ async def contact_developer(update: Update, context: ContextTypes.DEFAULT_TYPE):
         parse_mode="Markdown"
     )
     
-    # إرسال إشعار للمطور أن أحد المستخدمين يريد التواصل
     try:
         await context.bot.send_message(
             chat_id=ADMIN_ID,
@@ -84,14 +81,12 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user.id != ADMIN_ID:
         return
     
-    # عدد المستخدمين
     if not os.path.exists(USER_FILE):
         users_count = 0
     else:
         with open(USER_FILE, "r") as f:
             users_count = len(f.read().splitlines())
     
-    # عدد الملفات في قاعدة البيانات
     def count_files(node):
         if isinstance(node, list):
             return len(node)
@@ -185,14 +180,12 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     uid = update.effective_user.id
     user_path[uid] = []
 
-    # تسجيل المستخدم
     try:
         with open(USER_FILE, "a+") as f:
             f.seek(0)
             users = f.read().splitlines()
             if str(uid) not in users:
                 f.write(str(uid) + "\n")
-                # ترحيب للمستخدم الجديد
                 await update.message.reply_text(
                     "🎉 اهلاً بك في البوت!\n"
                     "يمكنك تصفح الملفات حسب التصنيفات\n"
@@ -254,6 +247,44 @@ async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"👥 العدد الكلي: {total}"
     )
 
+# ========= دالة الرد التلقائي على ملفات الأدمن (فقط في الخاص) =========
+async def auto_file_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    # فقط للأدمن
+    if update.effective_user.id != ADMIN_ID:
+        return
+    
+    # 🔥 مهم: يشتغل فقط في المحادثة الخاصة (وليس في المجموعات)
+    if update.effective_chat.type != "private":
+        return  # إذا كانت المجموعة أو قناة، لا تفعل شيئاً
+    
+    msg = update.message
+    
+    if msg.document:
+        file_id = msg.document.file_id
+        file_name = msg.document.file_name
+        await msg.reply_text(
+            f"📄 **file_id لـ {file_name}:**\n`{file_id}`\n\n✅ يمكنك نسخه واستخدامه في data.json",
+            parse_mode="Markdown"
+        )
+    elif msg.photo:
+        file_id = msg.photo[-1].file_id
+        await msg.reply_text(
+            f"🖼 **file_id:**\n`{file_id}`",
+            parse_mode="Markdown"
+        )
+    elif msg.video:
+        file_id = msg.video.file_id
+        await msg.reply_text(
+            f"🎥 **file_id:**\n`{file_id}`",
+            parse_mode="Markdown"
+        )
+    elif msg.audio:
+        file_id = msg.audio.file_id
+        await msg.reply_text(
+            f"🎵 **file_id:**\n`{file_id}`",
+            parse_mode="Markdown"
+        )
+
 async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     uid = update.effective_user.id
     text = update.message.text
@@ -274,7 +305,6 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     path = user_path[uid]
 
-    # 🔹 معالج زر التواصل مع المطور
     if text == "📞 تواصل مع المطور":
         await contact_developer(update, context)
         return
@@ -323,34 +353,6 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     user_path[uid] = path
 
-# ========= دالة الحصول على file_id عن طريق الرد =========
-async def get_file_id_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    # فقط للأدمن
-    if update.effective_user.id != ADMIN_ID:
-        return
-    
-    # يتأكد أن المستخدم رد على رسالة
-    if not update.message.reply_to_message:
-        await update.message.reply_text("❌ قم بالرد على الملف الذي تريد معرفة file_id خاص به\n\nالطريقة: /fileid ثم الرد على الملف")
-        return
-    
-    replied_msg = update.message.reply_to_message
-    
-    if replied_msg.document:
-        file_id = replied_msg.document.file_id
-        await update.message.reply_text(f"📄 file_id:\n`{file_id}`", parse_mode="Markdown")
-    elif replied_msg.photo:
-        file_id = replied_msg.photo[-1].file_id
-        await update.message.reply_text(f"🖼 file_id:\n`{file_id}`", parse_mode="Markdown")
-    elif replied_msg.video:
-        file_id = replied_msg.video.file_id
-        await update.message.reply_text(f"🎥 file_id:\n`{file_id}`", parse_mode="Markdown")
-    elif replied_msg.audio:
-        file_id = replied_msg.audio.file_id
-        await update.message.reply_text(f"🎵 file_id:\n`{file_id}`", parse_mode="Markdown")
-    else:
-        await update.message.reply_text("❌ هذا ليس ملفاً مدعوماً (الملفات المدعومة: مستند، صورة، فيديو، صوت)")
-
 # ========= تشغيل البوت =========
 if __name__ == "__main__":
     if not TOKEN:
@@ -364,10 +366,14 @@ if __name__ == "__main__":
         app.add_handler(CommandHandler("stats", stats))
         app.add_handler(CommandHandler("search", search))
         app.add_handler(CommandHandler("backup", backup))
-        app.add_handler(CommandHandler("fileid", get_file_id_command))
-
-        # معالجات الرسائل
+        
+        # 🆕 معالج الملفات التلقائي (فقط في الخاص)
+        app.add_handler(MessageHandler(filters.Document.ALL | filters.PHOTO | filters.VIDEO | filters.AUDIO, auto_file_id))
+        
+        # معالج الأزرار والنصوص
         app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handler))
         
         print("--- BOT IS RUNNING ---")
+        print("✅ البوت يرد على ملفات الأدمن فقط في المحادثة الخاصة")
+        print("✅ في المجموعات لا يرد البوت على أي ملف")
         app.run_polling()
