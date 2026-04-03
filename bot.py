@@ -323,23 +323,33 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     user_path[uid] = path
 
-async def get_file_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
+# ========= دالة الحصول على file_id عن طريق الرد =========
+async def get_file_id_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    # فقط للأدمن
     if update.effective_user.id != ADMIN_ID:
         return
-
-    msg = update.message
-    if msg.document:
-        file_id = msg.document.file_id
-        await msg.reply_text(f"📄 file_id:\n{file_id}")
-    elif msg.photo:
-        file_id = msg.photo[-1].file_id
-        await msg.reply_text(f"🖼 file_id:\n{file_id}")
-    elif msg.video:
-        file_id = msg.video.file_id
-        await msg.reply_text(f"🎥 file_id:\n{file_id}")
-    elif msg.audio:
-        file_id = msg.audio.file_id
-        await msg.reply_text(f"🎵 file_id:\n{file_id}")
+    
+    # يتأكد أن المستخدم رد على رسالة
+    if not update.message.reply_to_message:
+        await update.message.reply_text("❌ قم بالرد على الملف الذي تريد معرفة file_id خاص به\n\nالطريقة: /fileid ثم الرد على الملف")
+        return
+    
+    replied_msg = update.message.reply_to_message
+    
+    if replied_msg.document:
+        file_id = replied_msg.document.file_id
+        await update.message.reply_text(f"📄 file_id:\n`{file_id}`", parse_mode="Markdown")
+    elif replied_msg.photo:
+        file_id = replied_msg.photo[-1].file_id
+        await update.message.reply_text(f"🖼 file_id:\n`{file_id}`", parse_mode="Markdown")
+    elif replied_msg.video:
+        file_id = replied_msg.video.file_id
+        await update.message.reply_text(f"🎥 file_id:\n`{file_id}`", parse_mode="Markdown")
+    elif replied_msg.audio:
+        file_id = replied_msg.audio.file_id
+        await update.message.reply_text(f"🎵 file_id:\n`{file_id}`", parse_mode="Markdown")
+    else:
+        await update.message.reply_text("❌ هذا ليس ملفاً مدعوماً (الملفات المدعومة: مستند، صورة، فيديو، صوت)")
 
 # ========= تشغيل البوت =========
 if __name__ == "__main__":
@@ -354,9 +364,9 @@ if __name__ == "__main__":
         app.add_handler(CommandHandler("stats", stats))
         app.add_handler(CommandHandler("search", search))
         app.add_handler(CommandHandler("backup", backup))
-        
+        app.add_handler(CommandHandler("fileid", get_file_id_command))
+
         # معالجات الرسائل
-        app.add_handler(MessageHandler(filters.Document.ALL | filters.PHOTO | filters.VIDEO | filters.AUDIO, get_file_id))
         app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handler))
         
         print("--- BOT IS RUNNING ---")
