@@ -7,14 +7,162 @@ from telegram.error import BadRequest
 
 # ========= إعدادات البوت =========
 TOKEN = os.getenv("TOKEN")
-
 CHANNEL_ID = "@It_2028"
 CHANNEL_LINK = "https://t.me/It_2028"
+ADMIN_ID = 7554028181
+USER_FILE = "users.txt"
+DEVELOPER_USERNAME = "Oday2_4"  # اسم المستخدم حقك
+
+# ========= قراءة قاعدة البيانات =========
+with open("data.json", "r", encoding="utf-8") as f:
+    DATA = json.load(f)
+
+# ========= إضافة زر التواصل مع المطور =========
+# نضيف الزر الجديد للقائمة الرئيسية فقط
+MAIN_MENU_BUTTONS = list(DATA.keys()) + ["📞 تواصل مع المطور"]
+
+# ========= مسار المستخدم داخل القوائم =========
+user_path = {}
+
+# ========= دوال مساعدة =========
+def kb(options, back=True, is_main=False):
+    opts = list(options)
+    rows = [opts[i:i+2] for i in range(0, len(opts), 2)]
+    if back and not is_main:
+        rows.append(["⬅️ رجوع", "🏠 الرئيسية"])
+    elif back and is_main:
+        rows.append(["🏠 الرئيسية"])
+    return ReplyKeyboardMarkup(rows, resize_keyboard=True)
+
+def get_node(path):
+    node = DATA
+    for p in path:
+        if isinstance(node, dict) and p in node:
+            node = node[p]
+        else:
+            return DATA
+    return node
+
+# ========= دالة التواصل مع المطور =========
+async def contact_developer(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    uid = update.effective_user.id
+    username = update.effective_user.username or "لا يوجد يوزر"
+    first_name = update.effective_user.first_name or ""
+    
+    # إنشاء زر للتواصل
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("📩 مراسلة المطور", url=f"https://t.me/{DEVELOPER_USERNAME}")],
+        [InlineKeyboardButton("💬 إرسال رسالة مباشرة", url=f"tg://user?id={ADMIN_ID}")]
+    ])
+    
+    await update.message.reply_text(
+        f"👨‍💻 **للتواصل مع المطور:**\n\n"
+        f"• للإبلاغ عن مشكلة\n"
+        f"• للاقتراحات والتطوير\n"
+        f"• للاستفسارات\n\n"
+        f"اضغط على الزر أدناه للتواصل 📩",
+        reply_markup=keyboard,
+        parse_mode="Markdown"
+    )
+    
+    # إرسال إشعار للمطور أن أحد المستخدمين يريد التواصل
+    try:
+        await context.bot.send_message(
+            chat_id=ADMIN_ID,
+            text=f"📢 **طلب تواصل جديد**\n\n"
+                 f"👤 المستخدم: {first_name}\n"
+                 f"🆔 ID: `{uid}`\n"
+                 f"📝 اليوزر: @{username}\n"
+                 f"⏰ الوقت: {asyncio.get_event_loop().time()}",
+            parse_mode="Markdown"
+        )
+    except:
+        pass
+
+# ========= دالة الإحصائيات =========
+async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if update.effective_user.id != ADMIN_ID:
+        return
+    
+    # عدد المستخدمين
+    if not os.path.exists(USER_FILE):
+        users_count = 0
+    else:
+        with open(USER_FILE, "r") as f:
+            users_count = len(f.read().splitlines())
+    
+    # عدد الملفات في قاعدة البيانات
+    def count_files(node):
+        if isinstance(node, list):
+            return len(node)
+        elif isinstance(node, dict):
+            return sum(count_files(v) for v in node.values())
+        return 0
+    
+    files_count = count_files(DATA)
+    
+    await update.message.reply_text(
+        f"📊 إحصائيات البوت:\n"
+        f"👥 عدد المستخدمين: {users_count}\n"
+        f"📁 عدد الملفات: {files_count}\n"
+        f"📂 عدد التصنيفات: {len(DATA)}"
+    )
+
+# ========= دالة البحث =========
+async def search(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    joined = await force_join(update, context)
+    if not joined:
+        keyboard = InlineKeyboardMarkup([
+            [InlineKeyboardButton("📢 اشترك بالقناة", url=CHANNEL_LINK)]
+        ])
+        await update.message.reply_text("🚨 اشترك بالقناة أولاً", reply_markup=keyboard)
+        return
+    
+    query = " ".join(context.args)
+    if not query:
+        await update.message.reply_text("🔍 استخدم: /search اسم_الملف\nمثال: /search رياضيات")
+        return
+    
+    results = []
+    def search_in_node(node, path=""):
+        if isinstance(node, list):
+            for name, _ in node:
+                if query.lower() in name.lower():
+                    results.append((path, name))
+        elif isinstance(node, dict):
+            for k, v in node.items():
+                search_in_node(v, f"{path}/{k}" if path else k)
+    
+    search_in_node(DATA)
+    
+    if results:
+        msg = "🔍 نتائج البحث:\n\n"
+        for path, name in results[:10]:
+            msg += f"📁 {path} → {name}\n"
+        await update.message.reply_text(msg)
+    else:
+        await update.message.reply_text("❌ لا توجد نتائج مطابقة")
+
+# ========= دالة النسخ الاحتياطي =========
+async def backup(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if update.effective_user.id != ADMIN_ID:
+        return
+    
+    backup_file = f"backup_{int(asyncio.get_event_loop().time())}.json"
+    with open(backup_file, "w", encoding="utf-8") as f:
+        json.dump(DATA, f, ensure_ascii=False, indent=2)
+    
+    with open(backup_file, "rb") as f:
+        await update.message.reply_document(f, filename=backup_file)
+    
+    os.remove(backup_file)
+    await update.message.reply_text("✅ تم إنشاء النسخة الاحتياطية")
+
+# ========= دوال البوت الأساسية =========
 async def force_join(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         user_id = update.effective_user.id
         member = await context.bot.get_chat_member(CHANNEL_ID, user_id)
-
         if member.status in ["member", "administrator", "creator"]:
             return True
         else:
@@ -22,37 +170,8 @@ async def force_join(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except:
         return False
 
-ADMIN_ID = 7554028181
-USER_FILE = "users.txt"
-
-# ========= قراءة قاعدة البيانات =========
-with open("data.json", "r", encoding="utf-8") as f:
-    DATA = json.load(f)
-
-# ========= مسار المستخدم داخل القوائم =========
-user_path = {}
-def kb(options, back=True):
-    opts = list(options)
-    # ترتيب الأزرار في صفوف (كل صف فيه زرين)
-    rows = [opts[i:i+2] for i in range(0, len(opts), 2)]
-    if back:
-        rows.append(["⬅️ رجوع", "🏠 الرئيسية"])
-    return ReplyKeyboardMarkup(rows, resize_keyboard=True)
-
-def get_node(path):
-    node = DATA
-    for p in path:
-        # التأكد أن المفتاح موجود لتجنب انهيار البوت
-        if isinstance(node, dict) and p in node:
-            node = node[p]
-        else:
-            return DATA # العودة للبداية في حال حدوث خطأ
-    return node
-
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-
     joined = await force_join(update, context)
-
     if not joined:
         keyboard = InlineKeyboardMarkup([
             [InlineKeyboardButton("📢 اشترك بالقناة", url=CHANNEL_LINK)]
@@ -66,20 +185,27 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     uid = update.effective_user.id
     user_path[uid] = []
 
-    # تسجيل المستخدم للإذاعة
+    # تسجيل المستخدم
     try:
         with open(USER_FILE, "a+") as f:
             f.seek(0)
             users = f.read().splitlines()
             if str(uid) not in users:
                 f.write(str(uid) + "\n")
+                # ترحيب للمستخدم الجديد
+                await update.message.reply_text(
+                    "🎉 اهلاً بك في البوت!\n"
+                    "يمكنك تصفح الملفات حسب التصنيفات\n"
+                    "📞 يمكنك التواصل مع المطور من القائمة الرئيسية"
+                )
     except:
         pass
 
     await update.message.reply_text(
-        "🔥 تم تحديث البوت\nاختر السنة:",
-        reply_markup=kb(DATA.keys(), False)
+        "🔥 أهلاً بك في بوت الملخصات\nاختر السنة:",
+        reply_markup=kb(MAIN_MENU_BUTTONS, False, True)
     )
+
 async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user.id != ADMIN_ID:
         return
@@ -108,7 +234,6 @@ async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
         except:
             failed += 1
 
-        # تحديث العداد كل 10 مستخدمين
         if i % 10 == 0 or i == total:
             try:
                 await msg.edit_text(
@@ -130,13 +255,10 @@ async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-
     uid = update.effective_user.id
     text = update.message.text
 
-    # 🔴 تحقق الاشتراك الإجباري
     joined = await force_join(update, context)
-
     if not joined:
         keyboard = InlineKeyboardMarkup([
             [InlineKeyboardButton("📢 اشترك بالقناة", url=CHANNEL_LINK)]
@@ -147,43 +269,46 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
     
-    # التأكد أن المستخدم مسجل في الذاكرة، وإلا نبدأ من البداية
     if uid not in user_path:
         user_path[uid] = []
     
     path = user_path[uid]
 
-    # العودة للرئيسية
-    if text == "🏠 الرئيسية":
-        user_path[uid] = []
-        await update.message.reply_text("الرئيسية", reply_markup=kb(DATA.keys(), False))
+    # 🔹 معالج زر التواصل مع المطور
+    if text == "📞 تواصل مع المطور":
+        await contact_developer(update, context)
         return
 
-    # العودة للخلف
+    if text == "🏠 الرئيسية":
+        user_path[uid] = []
+        await update.message.reply_text("الرئيسية", reply_markup=kb(MAIN_MENU_BUTTONS, False, True))
+        return
+
     if text == "⬅️ رجوع":
         if path:
             path.pop()
         node = get_node(path)
         is_main = len(path) == 0
-        await update.message.reply_text("رجوع", reply_markup=kb(node.keys(), not is_main))
+        if is_main:
+            await update.message.reply_text("الرئيسية", reply_markup=kb(MAIN_MENU_BUTTONS, False, True))
+        else:
+            await update.message.reply_text("رجوع", reply_markup=kb(node.keys(), not is_main))
         return
 
     node = get_node(path)
 
-    # إذا كانت القائمة الحالية عبارة عن تصنيفات (أزرار)
     if isinstance(node, dict):
         if text in node:
             path.append(text)
             new_node = node[text]
 
-            if isinstance(new_node, list): # إذا وصلنا لقائمة الملفات
+            if isinstance(new_node, list):
                 await update.message.reply_text("اختر الملف لتحميله:", reply_markup=kb([n for n, _ in new_node]))
-            else: # إذا دخلنا في تصنيف فرعي آخر
+            else:
                 await update.message.reply_text(f"تم اختيار {text}:", reply_markup=kb(new_node.keys()))
         else:
             await update.message.reply_text("يرجى اختيار أحد الأزرار الظاهرة.")
 
-    # إذا كانت القائمة الحالية عبارة عن ملفات (إرسال مستند)
     elif isinstance(node, list):
         file_id = None
         for n, f in node:
@@ -197,44 +322,42 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text("الملف غير موجود، يرجى الاختيار من القائمة.")
 
     user_path[uid] = path
-async def get_file_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+async def get_file_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user.id != ADMIN_ID:
         return
 
     msg = update.message
-
     if msg.document:
         file_id = msg.document.file_id
         await msg.reply_text(f"📄 file_id:\n{file_id}")
-
     elif msg.photo:
         file_id = msg.photo[-1].file_id
         await msg.reply_text(f"🖼 file_id:\n{file_id}")
-
     elif msg.video:
         file_id = msg.video.file_id
         await msg.reply_text(f"🎥 file_id:\n{file_id}")
-
     elif msg.audio:
         file_id = msg.audio.file_id
         await msg.reply_text(f"🎵 file_id:\n{file_id}")
 
+# ========= تشغيل البوت =========
 if __name__ == "__main__":
     if not TOKEN:
         print("خطأ: لم يتم العثور على TOKEN! أضفه في متغيرات البيئة.")
     else:
         app = ApplicationBuilder().token(TOKEN).build()
+        
+        # أوامر البوت
         app.add_handler(CommandHandler("start", start))
         app.add_handler(CommandHandler("bc", broadcast))
-
-# 👇 هذا جديد (لازم تضيفه)
-        app.add_handler(MessageHandler(
-    filters.Document.ALL | filters.PHOTO | filters.VIDEO | filters.AUDIO,
-    get_file_id
-))
-
-        # 👇 هذا خليه مثل ما هو
+        app.add_handler(CommandHandler("stats", stats))
+        app.add_handler(CommandHandler("search", search))
+        app.add_handler(CommandHandler("backup", backup))
+        
+        # معالجات الرسائل
+        app.add_handler(MessageHandler(filters.Document.ALL | filters.PHOTO | filters.VIDEO | filters.AUDIO, get_file_id))
         app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handler))
+        
         print("--- BOT IS RUNNING ---")
         app.run_polling()
