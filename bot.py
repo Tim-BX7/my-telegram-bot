@@ -11,7 +11,7 @@ CHANNEL_ID = "@It_2028"
 CHANNEL_LINK = "https://t.me/It_2028"
 ADMIN_ID = 7554028181
 USER_FILE = "users.txt"
-DEVELOPER_USERNAME = "Oday2_4"  # اسم المستخدم حقك
+DEVELOPER_USERNAME = "Oday2_4"
 
 # ========= قراءة قاعدة البيانات =========
 with open("data.json", "r", encoding="utf-8") as f:
@@ -253,9 +253,9 @@ async def auto_file_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user.id != ADMIN_ID:
         return
     
-    # 🔥 مهم: يشتغل فقط في المحادثة الخاصة (وليس في المجموعات)
+    # 🔥 مهم: يشتغل فقط في المحادثة الخاصة
     if update.effective_chat.type != "private":
-        return  # إذا كانت المجموعة أو قناة، لا تفعل شيئاً
+        return
     
     msg = update.message
     
