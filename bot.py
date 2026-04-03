@@ -17,35 +17,24 @@ DEVELOPER_USERNAME = "Oday2_4"
 with open("data.json", "r", encoding="utf-8") as f:
     DATA = json.load(f)
 
-# ========= إضافة زر التواصل مع المطور =========
-MAIN_MENU_BUTTONS = list(DATA.keys())  # زر التواصل يضاف تلقائياً في النهاية
-
 # ========= مسار المستخدم داخل القوائم =========
 user_path = {}
 
 # ========= دوال مساعدة =========
-# ========= دوال مساعدة =========
 def kb(options, back=True, is_main=False):
     opts = list(options)
     
-    # فصل زر التواصل عن باقي الأزرار
-    contact_button = None
-    if "📞 تواصل مع المطور" in opts:
-        opts.remove("📞 تواصل مع المطور")
-        contact_button = "📞 تواصل مع المطور"
-    
     # ترتيب الأزرار العادية
     rows = [opts[i:i+2] for i in range(0, len(opts), 2)]
-    
-    # إضافة زر التواصل في النهاية
-    if contact_button:
-        rows.append([contact_button])
     
     # إضافة أزرار الرجوع والرئيسية
     if back and not is_main:
         rows.append(["⬅️ رجوع", "🏠 الرئيسية"])
     elif back and is_main:
         rows.append(["🏠 الرئيسية"])
+    
+    # 🔥 زر التواصل مع المطور - يظهر دائماً في النهاية
+    rows.append(["📞 تواصل مع المطور"])
     
     return ReplyKeyboardMarkup(rows, resize_keyboard=True)
 
@@ -204,15 +193,14 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 f.write(str(uid) + "\n")
                 await update.message.reply_text(
                     "🎉 اهلاً بك في البوت!\n"
-                    "يمكنك تصفح الملفات حسب التصنيفات\n"
-                    "📞 يمكنك التواصل مع المطور من القائمة الرئيسية"
+                    "يمكنك تصفح الملفات حسب التصنيفات"
                 )
     except:
         pass
 
     await update.message.reply_text(
         "🔥 أهلاً بك في بوت الملخصات\nاختر السنة:",
-        reply_markup=kb(MAIN_MENU_BUTTONS, False, True)
+        reply_markup=kb(list(DATA.keys()), False, True)
     )
 
 async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -321,13 +309,14 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     path = user_path[uid]
 
+    # 🔹 معالج زر التواصل مع المطور
     if text == "📞 تواصل مع المطور":
         await contact_developer(update, context)
         return
 
     if text == "🏠 الرئيسية":
         user_path[uid] = []
-        await update.message.reply_text("الرئيسية", reply_markup=kb(MAIN_MENU_BUTTONS, False, True))
+        await update.message.reply_text("الرئيسية", reply_markup=kb(list(DATA.keys()), False, True))
         return
 
     if text == "⬅️ رجوع":
@@ -336,7 +325,7 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         node = get_node(path)
         is_main = len(path) == 0
         if is_main:
-            await update.message.reply_text("الرئيسية", reply_markup=kb(MAIN_MENU_BUTTONS, False, True))
+            await update.message.reply_text("الرئيسية", reply_markup=kb(list(DATA.keys()), False, True))
         else:
             await update.message.reply_text("رجوع", reply_markup=kb(node.keys(), not is_main))
         return
@@ -383,7 +372,7 @@ if __name__ == "__main__":
         app.add_handler(CommandHandler("search", search))
         app.add_handler(CommandHandler("backup", backup))
         
-        # 🆕 معالج الملفات التلقائي (فقط في الخاص)
+        # معالج الملفات التلقائي (فقط في الخاص)
         app.add_handler(MessageHandler(filters.Document.ALL | filters.PHOTO | filters.VIDEO | filters.AUDIO, auto_file_id))
         
         # معالج الأزرار والنصوص
@@ -391,5 +380,6 @@ if __name__ == "__main__":
         
         print("--- BOT IS RUNNING ---")
         print("✅ البوت يرد على ملفات الأدمن فقط في المحادثة الخاصة")
+        print("✅ زر التواصل مع المطور يظهر في كل الصفحات")
         print("✅ في المجموعات لا يرد البوت على أي ملف")
         app.run_polling()
