@@ -1,41 +1,182 @@
 import os
 import json
 import asyncio
+import logging
+import sqlite3
+from datetime import datetime
+from functools import wraps
+from collections import defaultdict
+
 from telegram import Update, ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
-from telegram.error import BadRequest
+from telegram.error import BadRequest, TelegramError
+
+# ========= إعداد اللوغ =========
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    level=logging.INFO,
+    handlers=[
+        logging.FileHandler("bot.log", encoding="utf-8"),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
 
 # ========= إعدادات البوت =========
 TOKEN = os.getenv("TOKEN")
 CHANNEL_ID = "@It_2028"
 CHANNEL_LINK = "https://t.me/It_2028"
 ADMIN_ID = 7554028181
-USER_FILE = "users.txt"
 DEVELOPER_USERNAME = "Oday2_4"
 
-# ========= قراءة قاعدة البيانات =========
-with open("data.json", "r", encoding="utf-8") as f:
-    DATA = json.load(f)
+# ========= Rate Limiting (الأمان) =========
+user_request_times = defaultdict(list)
+RATE_LIMIT = 10        # عدد الطلبات المسموحة
+RATE_WINDOW = 60       # خلال هذه الثواني
 
-# ========= مسار المستخدم داخل القوائم =========
+def is_rate_limited(uid: int) -> bool:
+    now = asyncio.get_event_loop().time()
+    times = user_request_times[uid]
+    # احذف الطلبات القديمة
+    user_request_times[uid] = [t for t in times if now - t < RATE_WINDOW]
+    if len(user_request_times[uid]) >= RATE_LIMIT:
+        return True
+    user_request_times[uid].append(now)
+    return False
+
+# ========= قاعدة بيانات SQLite (بدل users.txt) =========
+def init_db():
+    conn = sqlite3.connect("bot.db")
+    c = conn.cursor()
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            uid INTEGER PRIMARY KEY,
+            username TEXT,
+            first_name TEXT,
+            joined_at TEXT,
+            last_seen TEXT,
+            request_count INTEGER DEFAULT 0,
+            is_banned INTEGER DEFAULT 0
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+def add_or_update_user(uid: int, username: str, first_name: str):
+    conn = sqlite3.connect("bot.db")
+    c = conn.cursor()
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    c.execute("""
+        INSERT INTO users (uid, username, first_name, joined_at, last_seen)
+        VALUES (?, ?, ?, ?, ?)
+        ON CONFLICT(uid) DO UPDATE SET
+            username=excluded.username,
+            first_name=excluded.first_name,
+            last_seen=excluded.last_seen,
+            request_count = request_count + 1
+    """, (uid, username, first_name, now, now))
+    conn.commit()
+    conn.close()
+
+def get_user_count() -> int:
+    conn = sqlite3.connect("bot.db")
+    c = conn.cursor()
+    c.execute("SELECT COUNT(*) FROM users")
+    count = c.fetchone()[0]
+    conn.close()
+    return count
+
+def is_banned(uid: int) -> bool:
+    conn = sqlite3.connect("bot.db")
+    c = conn.cursor()
+    c.execute("SELECT is_banned FROM users WHERE uid=?", (uid,))
+    row = c.fetchone()
+    conn.close()
+    return row and row[0] == 1
+
+def ban_user(uid: int):
+    conn = sqlite3.connect("bot.db")
+    c = conn.cursor()
+    c.execute("UPDATE users SET is_banned=1 WHERE uid=?", (uid,))
+    conn.commit()
+    conn.close()
+
+def unban_user(uid: int):
+    conn = sqlite3.connect("bot.db")
+    c = conn.cursor()
+    c.execute("UPDATE users SET is_banned=0 WHERE uid=?", (uid,))
+    conn.commit()
+    conn.close()
+
+def get_all_users() -> list:
+    conn = sqlite3.connect("bot.db")
+    c = conn.cursor()
+    c.execute("SELECT uid FROM users WHERE is_banned=0")
+    users = [row[0] for row in c.fetchall()]
+    conn.close()
+    return users
+
+def get_top_users(limit=10) -> list:
+    conn = sqlite3.connect("bot.db")
+    c = conn.cursor()
+    c.execute("""
+        SELECT uid, first_name, username, request_count 
+        FROM users ORDER BY request_count DESC LIMIT ?
+    """, (limit,))
+    users = c.fetchall()
+    conn.close()
+    return users
+
+# ========= تحميل البيانات مع التحقق =========
+def load_data() -> dict:
+    try:
+        with open("data.json", "r", encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        logger.error("data.json غير موجود!")
+        return {}
+    except json.JSONDecodeError as e:
+        logger.error(f"خطأ في data.json: {e}")
+        return {}
+
+DATA = load_data()
+
+# ========= مسار المستخدم =========
 user_path = {}
+# Cache لفحص الاشتراك (تجنب الطلبات الزائدة)
+join_cache = {}
+JOIN_CACHE_TTL = 300  # 5 دقائق
+
+# ========= Decorator للأمان =========
+def secure_handler(func):
+    @wraps(func)
+    async def wrapper(update: Update, context: ContextTypes.DEFAULT_TYPE):
+        if not update.effective_user or not update.message:
+            return
+        uid = update.effective_user.id
+
+        # فحص الحظر
+        if is_banned(uid):
+            await update.message.reply_text("🚫 أنت محظور من استخدام البوت.")
+            return
+
+        # Rate Limiting
+        if is_rate_limited(uid):
+            await update.message.reply_text("⚠️ أرسلت طلبات كثيرة! انتظر قليلاً.")
+            return
+
+        return await func(update, context)
+    return wrapper
 
 # ========= دوال مساعدة =========
 def kb(options, back=True, is_main=False):
     opts = list(options)
-    
-    # ترتيب الأزرار العادية
     rows = [opts[i:i+2] for i in range(0, len(opts), 2)]
-    
-    # إضافة أزرار الرجوع والرئيسية
     if back and not is_main:
         rows.append(["⬅️ رجوع", "🏠 الرئيسية"])
-    elif back and is_main:
+    elif is_main:
         rows.append(["🏠 الرئيسية"])
-    
-    # 🔥 زر التواصل مع المطور - يظهر دائماً في النهاية
     rows.append(["📞 تواصل مع المطور"])
-    
     return ReplyKeyboardMarkup(rows, resize_keyboard=True)
 
 def get_node(path):
@@ -47,82 +188,102 @@ def get_node(path):
             return DATA
     return node
 
-# ========= دالة التواصل مع المطور =========
+# ========= فحص الاشتراك مع Cache =========
+async def force_join(update: Update, context: ContextTypes.DEFAULT_TYPE) -> bool:
+    uid = update.effective_user.id
+    now = asyncio.get_event_loop().time()
+
+    # تحقق من الـ Cache
+    if uid in join_cache:
+        cached_time, cached_result = join_cache[uid]
+        if now - cached_time < JOIN_CACHE_TTL:
+            return cached_result
+
+    try:
+        member = await context.bot.get_chat_member(CHANNEL_ID, uid)
+        result = member.status in ["member", "administrator", "creator"]
+    except TelegramError:
+        result = False
+
+    join_cache[uid] = (now, result)
+    return result
+
+def not_joined_msg():
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("📢 اشترك بالقناة", url=CHANNEL_LINK)]
+    ])
+    return "🚨 يجب الاشتراك بالقناة أولاً لاستخدام البوت.", keyboard
+
+# ========= التواصل مع المطور =========
 async def contact_developer(update: Update, context: ContextTypes.DEFAULT_TYPE):
     uid = update.effective_user.id
-    username = update.effective_user.username or "لا يوجد يوزر"
+    username = update.effective_user.username or "لا يوجد"
     first_name = update.effective_user.first_name or ""
-    
+
     keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton("📩 مراسلة المطور", url=f"https://t.me/{DEVELOPER_USERNAME}")],
         [InlineKeyboardButton("💬 إرسال رسالة مباشرة", url=f"tg://user?id={ADMIN_ID}")]
     ])
-    
+
     await update.message.reply_text(
-        f"👨‍💻 **للتواصل مع المطور:**\n\n"
-        f"• للإبلاغ عن مشكلة\n"
-        f"• للاقتراحات والتطوير\n"
-        f"• للاستفسارات\n\n"
-        f"اضغط على الزر أدناه للتواصل 📩",
+        "👨‍💻 *للتواصل مع المطور:*\n\n"
+        "• الإبلاغ عن مشكلة\n"
+        "• الاقتراحات والتطوير\n"
+        "• الاستفسارات\n\n"
+        "اضغط على الزر أدناه 📩",
         reply_markup=keyboard,
         parse_mode="Markdown"
     )
-    
+
     try:
         await context.bot.send_message(
             chat_id=ADMIN_ID,
-            text=f"📢 **طلب تواصل جديد**\n\n"
-                 f"👤 المستخدم: {first_name}\n"
+            text=f"📢 *طلب تواصل جديد*\n\n"
+                 f"👤 الاسم: {first_name}\n"
                  f"🆔 ID: `{uid}`\n"
                  f"📝 اليوزر: @{username}\n"
-                 f"⏰ الوقت: {asyncio.get_event_loop().time()}",
+                 f"🕐 الوقت: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
             parse_mode="Markdown"
         )
-    except:
+    except TelegramError:
         pass
 
-# ========= دالة الإحصائيات =========
-async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_user.id != ADMIN_ID:
+# ========= /start =========
+@secure_handler
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    uid = update.effective_user.id
+    username = update.effective_user.username or ""
+    first_name = update.effective_user.first_name or ""
+
+    joined = await force_join(update, context)
+    if not joined:
+        msg, keyboard = not_joined_msg()
+        await update.message.reply_text(msg, reply_markup=keyboard)
         return
-    
-    if not os.path.exists(USER_FILE):
-        users_count = 0
-    else:
-        with open(USER_FILE, "r") as f:
-            users_count = len(f.read().splitlines())
-    
-    def count_files(node):
-        if isinstance(node, list):
-            return len(node)
-        elif isinstance(node, dict):
-            return sum(count_files(v) for v in node.values())
-        return 0
-    
-    files_count = count_files(DATA)
-    
+
+    add_or_update_user(uid, username, first_name)
+    user_path[uid] = []
+
     await update.message.reply_text(
-        f"📊 إحصائيات البوت:\n"
-        f"👥 عدد المستخدمين: {users_count}\n"
-        f"📁 عدد الملفات: {files_count}\n"
-        f"📂 عدد التصنيفات: {len(DATA)}"
+        f"🔥 أهلاً *{first_name}* في بوت الملخصات!\nاختر السنة:",
+        reply_markup=kb(list(DATA.keys()), False, True),
+        parse_mode="Markdown"
     )
 
-# ========= دالة البحث =========
+# ========= /search =========
+@secure_handler
 async def search(update: Update, context: ContextTypes.DEFAULT_TYPE):
     joined = await force_join(update, context)
     if not joined:
-        keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("📢 اشترك بالقناة", url=CHANNEL_LINK)]
-        ])
-        await update.message.reply_text("🚨 اشترك بالقناة أولاً", reply_markup=keyboard)
+        msg, keyboard = not_joined_msg()
+        await update.message.reply_text(msg, reply_markup=keyboard)
         return
-    
-    query = " ".join(context.args)
+
+    query = " ".join(context.args).strip()
     if not query:
-        await update.message.reply_text("🔍 استخدم: /search اسم_الملف\nمثال: /search رياضيات")
+        await update.message.reply_text("🔍 الاستخدام: `/search اسم_الملف`\nمثال: `/search رياضيات`", parse_mode="Markdown")
         return
-    
+
     results = []
     def search_in_node(node, path=""):
         if isinstance(node, list):
@@ -131,192 +292,201 @@ async def search(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     results.append((path, name))
         elif isinstance(node, dict):
             for k, v in node.items():
-                search_in_node(v, f"{path}/{k}" if path else k)
-    
-    search_in_node(DATA)
-    
-    if results:
-        msg = "🔍 نتائج البحث:\n\n"
-        for path, name in results[:10]:
-            msg += f"📁 {path} → {name}\n"
-        await update.message.reply_text(msg)
-    else:
-        await update.message.reply_text("❌ لا توجد نتائج مطابقة")
+                search_in_node(v, f"{path} ← {k}" if path else k)
 
-# ========= دالة النسخ الاحتياطي =========
-async def backup(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    search_in_node(DATA)
+
+    if results:
+        msg = f"🔍 نتائج البحث عن *{query}*:\n\n"
+        for path, name in results[:10]:
+            msg += f"📁 `{path}` → {name}\n"
+        if len(results) > 10:
+            msg += f"\n_...و {len(results)-10} نتيجة أخرى_"
+        await update.message.reply_text(msg, parse_mode="Markdown")
+    else:
+        await update.message.reply_text(f"❌ لا توجد نتائج لـ *{query}*", parse_mode="Markdown")
+
+# ========= /stats (أدمن) =========
+async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user.id != ADMIN_ID:
         return
-    
-    backup_file = f"backup_{int(asyncio.get_event_loop().time())}.json"
-    with open(backup_file, "w", encoding="utf-8") as f:
-        json.dump(DATA, f, ensure_ascii=False, indent=2)
-    
-    with open(backup_file, "rb") as f:
-        await update.message.reply_document(f, filename=backup_file)
-    
-    os.remove(backup_file)
-    await update.message.reply_text("✅ تم إنشاء النسخة الاحتياطية")
 
-# ========= دوال البوت الأساسية =========
-async def force_join(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    try:
-        user_id = update.effective_user.id
-        member = await context.bot.get_chat_member(CHANNEL_ID, user_id)
-        if member.status in ["member", "administrator", "creator"]:
-            return True
-        else:
-            return False
-    except:
-        return False
+    def count_files(node):
+        if isinstance(node, list):
+            return len(node)
+        elif isinstance(node, dict):
+            return sum(count_files(v) for v in node.values())
+        return 0
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    joined = await force_join(update, context)
-    if not joined:
-        keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("📢 اشترك بالقناة", url=CHANNEL_LINK)]
-        ])
-        await update.message.reply_text(
-            "🚨 لازم تشترك بالقناة أولاً حتى تستخدم البوت",
-            reply_markup=keyboard
-        )
-        return
-
-    uid = update.effective_user.id
-    user_path[uid] = []
-
-    try:
-        with open(USER_FILE, "a+") as f:
-            f.seek(0)
-            users = f.read().splitlines()
-            if str(uid) not in users:
-                f.write(str(uid) + "\n")
-                await update.message.reply_text(
-                    "🎉 اهلاً بك في البوت!\n"
-                    "يمكنك تصفح الملفات حسب التصنيفات"
-                )
-    except:
-        pass
+    top_users = get_top_users(5)
+    top_text = "\n".join([
+        f"  {i+1}. {u[1]} (@{u[2] or 'N/A'}) — {u[3]} طلب"
+        for i, u in enumerate(top_users)
+    ])
 
     await update.message.reply_text(
-        "🔥 أهلاً بك في بوت الملخصات\nاختر السنة:",
-        reply_markup=kb(list(DATA.keys()), False, True)
+        f"📊 *إحصائيات البوت:*\n\n"
+        f"👥 المستخدمون: `{get_user_count()}`\n"
+        f"📁 الملفات: `{count_files(DATA)}`\n"
+        f"📂 التصنيفات: `{len(DATA)}`\n\n"
+        f"🏆 *الأكثر نشاطاً:*\n{top_text}",
+        parse_mode="Markdown"
     )
 
+# ========= /ban و /unban (أدمن) =========
+async def ban_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if update.effective_user.id != ADMIN_ID:
+        return
+    if not context.args:
+        await update.message.reply_text("الاستخدام: `/ban USER_ID`", parse_mode="Markdown")
+        return
+    try:
+        target = int(context.args[0])
+        ban_user(target)
+        await update.message.reply_text(f"✅ تم حظر المستخدم `{target}`", parse_mode="Markdown")
+    except ValueError:
+        await update.message.reply_text("❌ ID غير صالح")
+
+async def unban_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if update.effective_user.id != ADMIN_ID:
+        return
+    if not context.args:
+        await update.message.reply_text("الاستخدام: `/unban USER_ID`", parse_mode="Markdown")
+        return
+    try:
+        target = int(context.args[0])
+        unban_user(target)
+        await update.message.reply_text(f"✅ تم رفع الحظر عن `{target}`", parse_mode="Markdown")
+    except ValueError:
+        await update.message.reply_text("❌ ID غير صالح")
+
+# ========= /broadcast (أدمن) =========
 async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user.id != ADMIN_ID:
         return
 
-    text = "🔥 تم تطوير البوت\n\nالرجاء الضغط على /start من جديد لتحديث القوائم ❤️"
+    # إذا أرسل الأدمن رسالة مخصصة
+    custom_text = " ".join(context.args) if context.args else None
+    text = custom_text or (
+        "🔥 تم تطوير البوت!\n\n"
+        "الرجاء الضغط على /start من جديد لتحديث القوائم ❤️"
+    )
 
-    if not os.path.exists(USER_FILE):
-        open(USER_FILE, "w").close()
-
-    with open(USER_FILE, "r") as f:
-        users = f.read().splitlines()
-
+    users = get_all_users()
     total = len(users)
-    sent = 0
-    failed = 0
+    sent = failed = 0
 
     msg = await update.message.reply_text(f"📡 بدء الإذاعة...\n0 / {total}")
 
-    for i, user in enumerate(users, start=1):
+    for i, uid in enumerate(users, start=1):
         try:
-            await context.bot.send_message(
-                chat_id=int(user),
-                text=text
-            )
+            await context.bot.send_message(chat_id=uid, text=text)
             sent += 1
-        except:
+        except TelegramError:
             failed += 1
 
         if i % 10 == 0 or i == total:
             try:
                 await msg.edit_text(
-                    f"📡 الإذاعة قيد الإرسال...\n"
-                    f"✅ تم الإرسال: {sent}\n"
-                    f"❌ فشل: {failed}\n"
-                    f"📊 التقدم: {i} / {total}"
+                    f"📡 *الإذاعة جارية...*\n"
+                    f"✅ تم: {sent}\n❌ فشل: {failed}\n📊 {i}/{total}",
+                    parse_mode="Markdown"
                 )
-            except:
+            except TelegramError:
                 pass
 
-        await asyncio.sleep(0.06)
+        await asyncio.sleep(0.05)
 
     await msg.edit_text(
-        f"✅ انتهت الإذاعة بنجاح\n\n"
+        f"✅ *انتهت الإذاعة*\n\n"
         f"📤 تم الإرسال: {sent}\n"
         f"🚫 فشل: {failed}\n"
-        f"👥 العدد الكلي: {total}"
+        f"👥 الكلي: {total}",
+        parse_mode="Markdown"
     )
 
-# ========= دالة الرد التلقائي على ملفات الأدمن (فقط في الخاص) =========
-async def auto_file_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    # فقط للأدمن
+# ========= /backup (أدمن) =========
+async def backup(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user.id != ADMIN_ID:
         return
-    
-    # 🔥 مهم: يشتغل فقط في المحادثة الخاصة
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    backup_file = f"backup_{timestamp}.json"
+
+    with open(backup_file, "w", encoding="utf-8") as f:
+        json.dump(DATA, f, ensure_ascii=False, indent=2)
+
+    with open(backup_file, "rb") as f:
+        await update.message.reply_document(f, filename=backup_file, caption="✅ نسخة احتياطية من data.json")
+
+    os.remove(backup_file)
+
+    # نسخة احتياطية من قاعدة البيانات أيضاً
+    if os.path.exists("bot.db"):
+        with open("bot.db", "rb") as f:
+            await update.message.reply_document(f, filename=f"backup_db_{timestamp}.db", caption="✅ نسخة احتياطية من قاعدة البيانات")
+
+# ========= auto file_id للأدمن =========
+async def auto_file_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if update.effective_user.id != ADMIN_ID:
+        return
     if update.effective_chat.type != "private":
         return
-    
+
     msg = update.message
-    
+    file_id = caption = None
+
     if msg.document:
         file_id = msg.document.file_id
-        file_name = msg.document.file_name
-        await msg.reply_text(
-            f"📄 **file_id لـ {file_name}:**\n`{file_id}`\n\n✅ يمكنك نسخه واستخدامه في data.json",
-            parse_mode="Markdown"
-        )
+        caption = f"📄 *{msg.document.file_name}*"
     elif msg.photo:
         file_id = msg.photo[-1].file_id
-        await msg.reply_text(
-            f"🖼 **file_id:**\n`{file_id}`",
-            parse_mode="Markdown"
-        )
+        caption = "🖼 صورة"
     elif msg.video:
         file_id = msg.video.file_id
-        await msg.reply_text(
-            f"🎥 **file_id:**\n`{file_id}`",
-            parse_mode="Markdown"
-        )
+        caption = "🎥 فيديو"
     elif msg.audio:
         file_id = msg.audio.file_id
+        caption = "🎵 صوت"
+
+    if file_id:
         await msg.reply_text(
-            f"🎵 **file_id:**\n`{file_id}`",
+            f"{caption}\n\n*file\\_id:*\n`{file_id}`\n\n✅ انسخه لـ data.json",
             parse_mode="Markdown"
         )
 
+# ========= المعالج الرئيسي =========
+@secure_handler
 async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     uid = update.effective_user.id
+    username = update.effective_user.username or ""
+    first_name = update.effective_user.first_name or ""
     text = update.message.text
 
     joined = await force_join(update, context)
     if not joined:
-        keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("📢 اشترك بالقناة", url=CHANNEL_LINK)]
-        ])
-        await update.message.reply_text(
-            "🚨 اشترك بالقناة حتى تستخدم البوت",
-            reply_markup=keyboard
-        )
+        msg, keyboard = not_joined_msg()
+        await update.message.reply_text(msg, reply_markup=keyboard)
         return
-    
+
+    add_or_update_user(uid, username, first_name)
+
     if uid not in user_path:
         user_path[uid] = []
-    
+
     path = user_path[uid]
 
-    # 🔹 معالج زر التواصل مع المطور
     if text == "📞 تواصل مع المطور":
         await contact_developer(update, context)
         return
 
     if text == "🏠 الرئيسية":
         user_path[uid] = []
-        await update.message.reply_text("الرئيسية", reply_markup=kb(list(DATA.keys()), False, True))
+        await update.message.reply_text(
+            "🏠 *الصفحة الرئيسية* — اختر السنة:",
+            reply_markup=kb(list(DATA.keys()), False, True),
+            parse_mode="Markdown"
+        )
         return
 
     if text == "⬅️ رجوع":
@@ -325,9 +495,14 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         node = get_node(path)
         is_main = len(path) == 0
         if is_main:
-            await update.message.reply_text("الرئيسية", reply_markup=kb(list(DATA.keys()), False, True))
+            await update.message.reply_text(
+                "🏠 *الصفحة الرئيسية* — اختر السنة:",
+                reply_markup=kb(list(DATA.keys()), False, True),
+                parse_mode="Markdown"
+            )
         else:
-            await update.message.reply_text("رجوع", reply_markup=kb(node.keys(), not is_main))
+            keys = node.keys() if isinstance(node, dict) else [n for n, _ in node]
+            await update.message.reply_text("⬅️ رجوع:", reply_markup=kb(keys))
         return
 
     node = get_node(path)
@@ -336,50 +511,58 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if text in node:
             path.append(text)
             new_node = node[text]
-
             if isinstance(new_node, list):
-                await update.message.reply_text("اختر الملف لتحميله:", reply_markup=kb([n for n, _ in new_node]))
+                await update.message.reply_text(
+                    f"📂 *{text}* — اختر الملف:",
+                    reply_markup=kb([n for n, _ in new_node]),
+                    parse_mode="Markdown"
+                )
             else:
-                await update.message.reply_text(f"تم اختيار {text}:", reply_markup=kb(new_node.keys()))
+                await update.message.reply_text(
+                    f"📂 *{text}* — اختر:",
+                    reply_markup=kb(new_node.keys()),
+                    parse_mode="Markdown"
+                )
         else:
-            await update.message.reply_text("يرجى اختيار أحد الأزرار الظاهرة.")
+            await update.message.reply_text("⚠️ يرجى الاختيار من الأزرار.")
 
     elif isinstance(node, list):
-        file_id = None
-        for n, f in node:
-            if text == n:
-                file_id = f
-                break
-        
+        file_id = next((f for n, f in node if text == n), None)
         if file_id:
-            await update.message.reply_document(file_id)
+            await update.message.reply_document(
+                file_id,
+                caption=f"📄 *{text}*",
+                parse_mode="Markdown"
+            )
+            logger.info(f"User {uid} downloaded: {text}")
         else:
-            await update.message.reply_text("الملف غير موجود، يرجى الاختيار من القائمة.")
+            await update.message.reply_text("❌ الملف غير موجود، اختر من القائمة.")
 
     user_path[uid] = path
 
 # ========= تشغيل البوت =========
 if __name__ == "__main__":
     if not TOKEN:
-        print("خطأ: لم يتم العثور على TOKEN! أضفه في متغيرات البيئة.")
+        logger.error("TOKEN غير موجود! أضفه في متغيرات البيئة.")
     else:
+        init_db()
+        logger.info("تم تهيئة قاعدة البيانات ✅")
+
         app = ApplicationBuilder().token(TOKEN).build()
-        
-        # أوامر البوت
+
         app.add_handler(CommandHandler("start", start))
         app.add_handler(CommandHandler("bc", broadcast))
         app.add_handler(CommandHandler("stats", stats))
         app.add_handler(CommandHandler("search", search))
         app.add_handler(CommandHandler("backup", backup))
-        
-        # معالج الملفات التلقائي (فقط في الخاص)
-        app.add_handler(MessageHandler(filters.Document.ALL | filters.PHOTO | filters.VIDEO | filters.AUDIO, auto_file_id))
-        
-        # معالج الأزرار والنصوص
+        app.add_handler(CommandHandler("ban", ban_cmd))
+        app.add_handler(CommandHandler("unban", unban_cmd))
+
+        app.add_handler(MessageHandler(
+            filters.Document.ALL | filters.PHOTO | filters.VIDEO | filters.AUDIO,
+            auto_file_id
+        ))
         app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handler))
-        
-        print("--- BOT IS RUNNING ---")
-        print("✅ البوت يرد على ملفات الأدمن فقط في المحادثة الخاصة")
-        print("✅ زر التواصل مع المطور يظهر في كل الصفحات")
-        print("✅ في المجموعات لا يرد البوت على أي ملف")
+
+        logger.info("--- BOT IS RUNNING ---")
         app.run_polling()
