@@ -5,7 +5,6 @@ import logging
 import sqlite3
 from datetime import datetime
 from functools import wraps
-from collections import defaultdict
 
 from telegram import Update, ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
@@ -29,20 +28,6 @@ CHANNEL_LINK = "https://t.me/It_2028"
 ADMIN_ID = 7554028181
 DEVELOPER_USERNAME = "Oday2_4"
 
-# ========= Rate Limiting (الأمان) =========
-user_request_times = defaultdict(list)
-RATE_LIMIT = 10        # عدد الطلبات المسموحة
-RATE_WINDOW = 60       # خلال هذه الثواني
-
-def is_rate_limited(uid: int) -> bool:
-    now = asyncio.get_event_loop().time()
-    times = user_request_times[uid]
-    # احذف الطلبات القديمة
-    user_request_times[uid] = [t for t in times if now - t < RATE_WINDOW]
-    if len(user_request_times[uid]) >= RATE_LIMIT:
-        return True
-    user_request_times[uid].append(now)
-    return False
 
 # ========= قاعدة بيانات SQLite (بدل users.txt) =========
 def init_db():
@@ -160,12 +145,7 @@ def secure_handler(func):
             await update.message.reply_text("🚫 أنت محظور من استخدام البوت.")
             return
 
-        # Rate Limiting
-        if is_rate_limited(uid):
-            await update.message.reply_text("⚠️ أرسلت طلبات كثيرة! انتظر قليلاً.")
-            return
-
-        return await func(update, context)
+return await func(update, context)
     return wrapper
 
 # ========= دوال مساعدة =========
