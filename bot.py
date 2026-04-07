@@ -5,11 +5,11 @@ import logging
 import sqlite3
 from datetime import datetime
 from functools import wraps
-
+ 
 from telegram import Update, ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
-from telegram.error import BadRequest, TelegramError
-
+from telegram.error import TelegramError
+ 
 # ========= إعداد اللوغ =========
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -20,14 +20,13 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger(__name__)
-
+ 
 # ========= إعدادات البوت =========
 TOKEN = os.getenv("TOKEN")
 ADMIN_ID = 7554028181
 DEVELOPER_USERNAME = "Oday2_4"
-
-
-# ========= قاعدة بيانات SQLite (بدل users.txt) =========
+ 
+# ========= قاعدة بيانات SQLite =========
 def init_db():
     conn = sqlite3.connect("bot.db")
     c = conn.cursor()
@@ -44,7 +43,7 @@ def init_db():
     """)
     conn.commit()
     conn.close()
-
+ 
 def add_or_update_user(uid: int, username: str, first_name: str):
     conn = sqlite3.connect("bot.db")
     c = conn.cursor()
@@ -60,7 +59,7 @@ def add_or_update_user(uid: int, username: str, first_name: str):
     """, (uid, username, first_name, now, now))
     conn.commit()
     conn.close()
-
+ 
 def get_user_count() -> int:
     conn = sqlite3.connect("bot.db")
     c = conn.cursor()
@@ -68,7 +67,7 @@ def get_user_count() -> int:
     count = c.fetchone()[0]
     conn.close()
     return count
-
+ 
 def is_banned(uid: int) -> bool:
     conn = sqlite3.connect("bot.db")
     c = conn.cursor()
@@ -76,21 +75,21 @@ def is_banned(uid: int) -> bool:
     row = c.fetchone()
     conn.close()
     return row and row[0] == 1
-
+ 
 def ban_user(uid: int):
     conn = sqlite3.connect("bot.db")
     c = conn.cursor()
     c.execute("UPDATE users SET is_banned=1 WHERE uid=?", (uid,))
     conn.commit()
     conn.close()
-
+ 
 def unban_user(uid: int):
     conn = sqlite3.connect("bot.db")
     c = conn.cursor()
     c.execute("UPDATE users SET is_banned=0 WHERE uid=?", (uid,))
     conn.commit()
     conn.close()
-
+ 
 def get_all_users() -> list:
     conn = sqlite3.connect("bot.db")
     c = conn.cursor()
@@ -98,19 +97,19 @@ def get_all_users() -> list:
     users = [row[0] for row in c.fetchall()]
     conn.close()
     return users
-
+ 
 def get_top_users(limit=10) -> list:
     conn = sqlite3.connect("bot.db")
     c = conn.cursor()
     c.execute("""
-        SELECT uid, first_name, username, request_count 
+        SELECT uid, first_name, username, request_count
         FROM users ORDER BY request_count DESC LIMIT ?
     """, (limit,))
     users = c.fetchall()
     conn.close()
     return users
-
-# ========= تحميل البيانات مع التحقق =========
+ 
+# ========= تحميل البيانات =========
 def load_data() -> dict:
     try:
         with open("data.json", "r", encoding="utf-8") as f:
@@ -121,12 +120,12 @@ def load_data() -> dict:
     except json.JSONDecodeError as e:
         logger.error(f"خطأ في data.json: {e}")
         return {}
-
+ 
 DATA = load_data()
-
+ 
 # ========= مسار المستخدم =========
 user_path = {}
-
+ 
 # ========= Decorator للأمان =========
 def secure_handler(func):
     @wraps(func)
@@ -134,15 +133,12 @@ def secure_handler(func):
         if not update.effective_user or not update.message:
             return
         uid = update.effective_user.id
-
-        # فحص الحظر
         if is_banned(uid):
             await update.message.reply_text("🚫 أنت محظور من استخدام البوت.")
             return
-
-return await func(update, context)
+        return await func(update, context)
     return wrapper
-
+ 
 # ========= دوال مساعدة =========
 def kb(options, back=True, is_main=False):
     opts = list(options)
@@ -153,7 +149,7 @@ def kb(options, back=True, is_main=False):
         rows.append(["🏠 الرئيسية"])
     rows.append(["📞 تواصل مع المطور"])
     return ReplyKeyboardMarkup(rows, resize_keyboard=True)
-
+ 
 def get_node(path):
     node = DATA
     for p in path:
@@ -162,19 +158,18 @@ def get_node(path):
         else:
             return DATA
     return node
-
-
+ 
 # ========= التواصل مع المطور =========
 async def contact_developer(update: Update, context: ContextTypes.DEFAULT_TYPE):
     uid = update.effective_user.id
     username = update.effective_user.username or "لا يوجد"
     first_name = update.effective_user.first_name or ""
-
+ 
     keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton("📩 مراسلة المطور", url=f"https://t.me/{DEVELOPER_USERNAME}")],
         [InlineKeyboardButton("💬 إرسال رسالة مباشرة", url=f"tg://user?id={ADMIN_ID}")]
     ])
-
+ 
     await update.message.reply_text(
         "👨‍💻 *للتواصل مع المطور:*\n\n"
         "• الإبلاغ عن مشكلة\n"
@@ -184,7 +179,7 @@ async def contact_developer(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply_markup=keyboard,
         parse_mode="Markdown"
     )
-
+ 
     try:
         await context.bot.send_message(
             chat_id=ADMIN_ID,
@@ -197,32 +192,36 @@ async def contact_developer(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
     except TelegramError:
         pass
-
+ 
 # ========= /start =========
 @secure_handler
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     uid = update.effective_user.id
     username = update.effective_user.username or ""
     first_name = update.effective_user.first_name or ""
-
+ 
     add_or_update_user(uid, username, first_name)
     user_path[uid] = []
-
+ 
     await update.message.reply_text(
         f"🔥 أهلاً *{first_name}* في بوت الملخصات!\nاختر السنة:",
         reply_markup=kb(list(DATA.keys()), False, True),
         parse_mode="Markdown"
     )
-
+ 
 # ========= /search =========
 @secure_handler
 async def search(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = " ".join(context.args).strip()
     if not query:
-        await update.message.reply_text("🔍 الاستخدام: `/search اسم_الملف`\nمثال: `/search رياضيات`", parse_mode="Markdown")
+        await update.message.reply_text(
+            "🔍 الاستخدام: `/search اسم_الملف`\nمثال: `/search رياضيات`",
+            parse_mode="Markdown"
+        )
         return
-
+ 
     results = []
+ 
     def search_in_node(node, path=""):
         if isinstance(node, list):
             for name, _ in node:
@@ -231,9 +230,9 @@ async def search(update: Update, context: ContextTypes.DEFAULT_TYPE):
         elif isinstance(node, dict):
             for k, v in node.items():
                 search_in_node(v, f"{path} ← {k}" if path else k)
-
+ 
     search_in_node(DATA)
-
+ 
     if results:
         msg = f"🔍 نتائج البحث عن *{query}*:\n\n"
         for path, name in results[:10]:
@@ -243,25 +242,25 @@ async def search(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(msg, parse_mode="Markdown")
     else:
         await update.message.reply_text(f"❌ لا توجد نتائج لـ *{query}*", parse_mode="Markdown")
-
+ 
 # ========= /stats (أدمن) =========
 async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user.id != ADMIN_ID:
         return
-
+ 
     def count_files(node):
         if isinstance(node, list):
             return len(node)
         elif isinstance(node, dict):
             return sum(count_files(v) for v in node.values())
         return 0
-
+ 
     top_users = get_top_users(5)
     top_text = "\n".join([
         f"  {i+1}. {u[1]} (@{u[2] or 'N/A'}) — {u[3]} طلب"
         for i, u in enumerate(top_users)
     ])
-
+ 
     await update.message.reply_text(
         f"📊 *إحصائيات البوت:*\n\n"
         f"👥 المستخدمون: `{get_user_count()}`\n"
@@ -270,7 +269,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"🏆 *الأكثر نشاطاً:*\n{top_text}",
         parse_mode="Markdown"
     )
-
+ 
 # ========= /ban و /unban (أدمن) =========
 async def ban_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user.id != ADMIN_ID:
@@ -284,7 +283,7 @@ async def ban_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(f"✅ تم حظر المستخدم `{target}`", parse_mode="Markdown")
     except ValueError:
         await update.message.reply_text("❌ ID غير صالح")
-
+ 
 async def unban_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user.id != ADMIN_ID:
         return
@@ -297,32 +296,31 @@ async def unban_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(f"✅ تم رفع الحظر عن `{target}`", parse_mode="Markdown")
     except ValueError:
         await update.message.reply_text("❌ ID غير صالح")
-
+ 
 # ========= /broadcast (أدمن) =========
 async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user.id != ADMIN_ID:
         return
-
-    # إذا أرسل الأدمن رسالة مخصصة
+ 
     custom_text = " ".join(context.args) if context.args else None
     text = custom_text or (
         "🔥 تم تطوير البوت!\n\n"
         "الرجاء الضغط على /start من جديد لتحديث القوائم ❤️"
     )
-
+ 
     users = get_all_users()
     total = len(users)
     sent = failed = 0
-
+ 
     msg = await update.message.reply_text(f"📡 بدء الإذاعة...\n0 / {total}")
-
+ 
     for i, uid in enumerate(users, start=1):
         try:
             await context.bot.send_message(chat_id=uid, text=text)
             sent += 1
         except TelegramError:
             failed += 1
-
+ 
         if i % 10 == 0 or i == total:
             try:
                 await msg.edit_text(
@@ -332,9 +330,9 @@ async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 )
             except TelegramError:
                 pass
-
+ 
         await asyncio.sleep(0.05)
-
+ 
     await msg.edit_text(
         f"✅ *انتهت الإذاعة*\n\n"
         f"📤 تم الإرسال: {sent}\n"
@@ -342,38 +340,41 @@ async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"👥 الكلي: {total}",
         parse_mode="Markdown"
     )
-
+ 
 # ========= /backup (أدمن) =========
 async def backup(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user.id != ADMIN_ID:
         return
-
+ 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     backup_file = f"backup_{timestamp}.json"
-
+ 
     with open(backup_file, "w", encoding="utf-8") as f:
         json.dump(DATA, f, ensure_ascii=False, indent=2)
-
+ 
     with open(backup_file, "rb") as f:
         await update.message.reply_document(f, filename=backup_file, caption="✅ نسخة احتياطية من data.json")
-
+ 
     os.remove(backup_file)
-
-    # نسخة احتياطية من قاعدة البيانات أيضاً
+ 
     if os.path.exists("bot.db"):
         with open("bot.db", "rb") as f:
-            await update.message.reply_document(f, filename=f"backup_db_{timestamp}.db", caption="✅ نسخة احتياطية من قاعدة البيانات")
-
+            await update.message.reply_document(
+                f,
+                filename=f"backup_db_{timestamp}.db",
+                caption="✅ نسخة احتياطية من قاعدة البيانات"
+            )
+ 
 # ========= auto file_id للأدمن =========
 async def auto_file_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user.id != ADMIN_ID:
         return
     if update.effective_chat.type != "private":
         return
-
+ 
     msg = update.message
     file_id = caption = None
-
+ 
     if msg.document:
         file_id = msg.document.file_id
         caption = f"📄 *{msg.document.file_name}*"
@@ -386,13 +387,13 @@ async def auto_file_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif msg.audio:
         file_id = msg.audio.file_id
         caption = "🎵 صوت"
-
+ 
     if file_id:
         await msg.reply_text(
             f"{caption}\n\n*file\\_id:*\n`{file_id}`\n\n✅ انسخه لـ data.json",
             parse_mode="Markdown"
         )
-
+ 
 # ========= المعالج الرئيسي =========
 @secure_handler
 async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -400,18 +401,18 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     username = update.effective_user.username or ""
     first_name = update.effective_user.first_name or ""
     text = update.message.text
-
+ 
     add_or_update_user(uid, username, first_name)
-
+ 
     if uid not in user_path:
         user_path[uid] = []
-
+ 
     path = user_path[uid]
-
+ 
     if text == "📞 تواصل مع المطور":
         await contact_developer(update, context)
         return
-
+ 
     if text == "🏠 الرئيسية":
         user_path[uid] = []
         await update.message.reply_text(
@@ -420,7 +421,7 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             parse_mode="Markdown"
         )
         return
-
+ 
     if text == "⬅️ رجوع":
         if path:
             path.pop()
@@ -436,9 +437,9 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             keys = node.keys() if isinstance(node, dict) else [n for n, _ in node]
             await update.message.reply_text("⬅️ رجوع:", reply_markup=kb(keys))
         return
-
+ 
     node = get_node(path)
-
+ 
     if isinstance(node, dict):
         if text in node:
             path.append(text)
@@ -457,7 +458,7 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 )
         else:
             await update.message.reply_text("⚠️ يرجى الاختيار من الأزرار.")
-
+ 
     elif isinstance(node, list):
         file_id = next((f for n, f in node if text == n), None)
         if file_id:
@@ -469,9 +470,9 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             logger.info(f"User {uid} downloaded: {text}")
         else:
             await update.message.reply_text("❌ الملف غير موجود، اختر من القائمة.")
-
+ 
     user_path[uid] = path
-
+ 
 # ========= تشغيل البوت =========
 if __name__ == "__main__":
     if not TOKEN:
@@ -479,9 +480,9 @@ if __name__ == "__main__":
     else:
         init_db()
         logger.info("تم تهيئة قاعدة البيانات ✅")
-
+ 
         app = ApplicationBuilder().token(TOKEN).build()
-
+ 
         app.add_handler(CommandHandler("start", start))
         app.add_handler(CommandHandler("bc", broadcast))
         app.add_handler(CommandHandler("stats", stats))
@@ -489,12 +490,12 @@ if __name__ == "__main__":
         app.add_handler(CommandHandler("backup", backup))
         app.add_handler(CommandHandler("ban", ban_cmd))
         app.add_handler(CommandHandler("unban", unban_cmd))
-
+ 
         app.add_handler(MessageHandler(
             filters.Document.ALL | filters.PHOTO | filters.VIDEO | filters.AUDIO,
             auto_file_id
         ))
         app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handler))
-
+ 
         logger.info("--- BOT IS RUNNING ---")
         app.run_polling()
