@@ -25,6 +25,7 @@ logger = logging.getLogger(__name__)
 TOKEN = os.getenv("TOKEN")
 ADMIN_ID = 7554028181
 DEVELOPER_USERNAME = "Oday2_4"
+CHANNEL_USERNAME = "@your_channel"  # ← غيّر هذا لاسم قناتك
  
 # ========= قاعدة بيانات SQLite =========
 def init_db():
@@ -304,8 +305,13 @@ async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
  
     custom_text = " ".join(context.args) if context.args else None
     text = custom_text or (
-        "🔥 تم تطوير البوت!\n\n"
-        "الرجاء الضغط على /start من جديد لتحديث القوائم ❤️"
+        "📚 *مرحباً بالجميع!*\n\n"
+        "جرّبوا البوت وشوفوا شو عنا من ملفات 🎓\n\n"
+        "📌 البوت فيه ملفات المكاتب، وقريباً رح نضيف كمان ملفات الدكاترة!\n\n"
+        "📢 متابعين قناتنا؟ كل جديد بينزل عليها أولاً:\n"
+        f"{CHANNEL_USERNAME}\n\n"
+        "إذا واجهتوا أي مشكلة أو عندكم اقتراح، تواصلوا مع الأدمن مباشرة من داخل البوت 👇\n"
+        "اضغطوا على 📞 *تواصل مع المطور*"
     )
  
     users = get_all_users()
@@ -316,7 +322,7 @@ async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
  
     for i, uid in enumerate(users, start=1):
         try:
-            await context.bot.send_message(chat_id=uid, text=text)
+            await context.bot.send_message(chat_id=uid, text=text, parse_mode="Markdown")
             sent += 1
         except TelegramError:
             failed += 1
@@ -365,32 +371,43 @@ async def backup(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 caption="✅ نسخة احتياطية من قاعدة البيانات"
             )
  
-# ========= auto file_id للأدمن =========
-async def auto_file_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_user.id != ADMIN_ID:
-        return
-    if update.effective_chat.type != "private":
-        return
+# ========= معالج الملفات =========
+async def handle_files(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    uid = update.effective_user.id
  
-    msg = update.message
-    file_id = caption = None
+    # ===== أدمن: احصل على file_id =====
+    if uid == ADMIN_ID:
+        if update.effective_chat.type != "private":
+            return
  
-    if msg.document:
-        file_id = msg.document.file_id
-        caption = f"📄 *{msg.document.file_name}*"
-    elif msg.photo:
-        file_id = msg.photo[-1].file_id
-        caption = "🖼 صورة"
-    elif msg.video:
-        file_id = msg.video.file_id
-        caption = "🎥 فيديو"
-    elif msg.audio:
-        file_id = msg.audio.file_id
-        caption = "🎵 صوت"
+        msg = update.message
+        file_id = caption = None
  
-    if file_id:
-        await msg.reply_text(
-            f"{caption}\n\n*file\\_id:*\n`{file_id}`\n\n✅ انسخه لـ data.json",
+        if msg.document:
+            file_id = msg.document.file_id
+            caption = f"📄 *{msg.document.file_name}*"
+        elif msg.photo:
+            file_id = msg.photo[-1].file_id
+            caption = "🖼 صورة"
+        elif msg.video:
+            file_id = msg.video.file_id
+            caption = "🎥 فيديو"
+        elif msg.audio:
+            file_id = msg.audio.file_id
+            caption = "🎵 صوت"
+ 
+        if file_id:
+            await msg.reply_text(
+                f"{caption}\n\n*file\\_id:*\n`{file_id}`\n\n✅ انسخه لـ data.json",
+                parse_mode="Markdown"
+            )
+ 
+    # ===== مستخدم عادي: رفض الملف =====
+    else:
+        await update.message.reply_text(
+            "❌ *لا يمكن رفع ملفات.*\n\n"
+            "البوت مخصص فقط لتحميل الملفات الموجودة.\n"
+            "إذا عندك اقتراح أو طلب، تواصل مع الأدمن 👇",
             parse_mode="Markdown"
         )
  
@@ -491,9 +508,10 @@ if __name__ == "__main__":
         app.add_handler(CommandHandler("ban", ban_cmd))
         app.add_handler(CommandHandler("unban", unban_cmd))
  
+        # معالج موحد للملفات (أدمن → file_id | مستخدم → رفض)
         app.add_handler(MessageHandler(
             filters.Document.ALL | filters.PHOTO | filters.VIDEO | filters.AUDIO,
-            auto_file_id
+            handle_files
         ))
         app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handler))
  
