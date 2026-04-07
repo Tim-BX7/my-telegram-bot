@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 TOKEN = os.getenv("TOKEN")
 ADMIN_ID = 7554028181
 DEVELOPER_USERNAME = "Oday2_4"
-CHANNEL_USERNAME = "@your_channel"  # ← غيّر هذا لاسم قناتك
+CHANNEL_USERNAME = "@It_2028"  # ← غيّر هذا لاسم قناتك
  
 # ========= قاعدة بيانات SQLite =========
 def init_db():
