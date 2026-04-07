@@ -23,8 +23,6 @@ logger = logging.getLogger(__name__)
 
 # ========= إعدادات البوت =========
 TOKEN = os.getenv("TOKEN")
-CHANNEL_ID = "@It_2028"
-CHANNEL_LINK = "https://t.me/It_2028"
 ADMIN_ID = 7554028181
 DEVELOPER_USERNAME = "Oday2_4"
 
@@ -128,9 +126,6 @@ DATA = load_data()
 
 # ========= مسار المستخدم =========
 user_path = {}
-# Cache لفحص الاشتراك (تجنب الطلبات الزائدة)
-join_cache = {}
-JOIN_CACHE_TTL = 300  # 5 دقائق
 
 # ========= Decorator للأمان =========
 def secure_handler(func):
@@ -168,31 +163,6 @@ def get_node(path):
             return DATA
     return node
 
-# ========= فحص الاشتراك مع Cache =========
-async def force_join(update: Update, context: ContextTypes.DEFAULT_TYPE) -> bool:
-    uid = update.effective_user.id
-    now = asyncio.get_event_loop().time()
-
-    # تحقق من الـ Cache
-    if uid in join_cache:
-        cached_time, cached_result = join_cache[uid]
-        if now - cached_time < JOIN_CACHE_TTL:
-            return cached_result
-
-    try:
-        member = await context.bot.get_chat_member(CHANNEL_ID, uid)
-        result = member.status in ["member", "administrator", "creator"]
-    except TelegramError:
-        result = False
-
-    join_cache[uid] = (now, result)
-    return result
-
-def not_joined_msg():
-    keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("📢 اشترك بالقناة", url=CHANNEL_LINK)]
-    ])
-    return "🚨 يجب الاشتراك بالقناة أولاً لاستخدام البوت.", keyboard
 
 # ========= التواصل مع المطور =========
 async def contact_developer(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -235,12 +205,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     username = update.effective_user.username or ""
     first_name = update.effective_user.first_name or ""
 
-    joined = await force_join(update, context)
-    if not joined:
-        msg, keyboard = not_joined_msg()
-        await update.message.reply_text(msg, reply_markup=keyboard)
-        return
-
     add_or_update_user(uid, username, first_name)
     user_path[uid] = []
 
@@ -253,12 +217,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # ========= /search =========
 @secure_handler
 async def search(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    joined = await force_join(update, context)
-    if not joined:
-        msg, keyboard = not_joined_msg()
-        await update.message.reply_text(msg, reply_markup=keyboard)
-        return
-
     query = " ".join(context.args).strip()
     if not query:
         await update.message.reply_text("🔍 الاستخدام: `/search اسم_الملف`\nمثال: `/search رياضيات`", parse_mode="Markdown")
@@ -442,12 +400,6 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     username = update.effective_user.username or ""
     first_name = update.effective_user.first_name or ""
     text = update.message.text
-
-    joined = await force_join(update, context)
-    if not joined:
-        msg, keyboard = not_joined_msg()
-        await update.message.reply_text(msg, reply_markup=keyboard)
-        return
 
     add_or_update_user(uid, username, first_name)
 
