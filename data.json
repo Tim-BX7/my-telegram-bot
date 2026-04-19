@@ -310,30 +310,36 @@
 
   },
 
-  "📄 النظري": {
-    "📚 كميت": [
-      ["هندسة 1", "BQACAgIAAxkBAAIBv2m8QerIa6Rl9ONwAZn2b_0OPEVKAAJIpQACTejhSexyIatCBct4OgQ"],
-      ["هندسة 2", "BQACAgIAAxkBAAIBwGm8QepaThoaIg8neyQjKnZlZHHuAAJJpQACTejhSQsSUf3wWnmKOgQ"],
-      ["هندسة 3", "BQACAgIAAxkBAAIBwWm8QepclJJ449tn6QABQK2qlJMrpwACS6UAAk3o4UmeVRBMzzs6XzoE"],
-      ["هندسة 4", "BQACAgIAAxkBAAIBwmm8QerW30-7Xjlf3NizHS2LI8Z2AAJNpQACTejhSdfPLEVmdFlxOgQ"],
-      ["هندسة 5", "BQACAgIAAxkBAAIBw2m8QerQn4zgXOtsCXxwRaLbEJnqAAJRpQACTejhScuGrbeK68AeOgQ"],
-      ["هندسة 6", "BQACAgIAAxkBAAIBxGm8Qeoj2XV1KlSi6mw1S3w9AqIPAAJXpQACTejhSano2eOiS0l7OgQ"],
-      ["هندسة 7", "BQACAgIAAxkBAAIBxWm8Qeq1BqQfHBhN31RTLCZ5643AAJdpQACTejhSdguUkHhbIYOOgQ"],
-      ["هندسة 8", "BQACAgIAAxkBAAIBxmm8Qeq0FZpPRa6lI5tGXSbEEzHTAAJfpQACTejhST9TtJ6ZvcGWOgQ"],
-      ["هندسة 9", "BQACAgIAAxkBAAIBvmm8QeomzHbpqOq9w_z5-VUfjJqkAAJHpQACTejhSTkprNGcsN0eOgQ"]
-    ],
+"📄 النظري": {
+  "📚 كميت": [
+    ["هندسة 1", "BQACAgIAAxkBAAIBv2m8QerIa6Rl9ONwAZn2b_0OPEVKAAJIpQACTejhSexyIatCBct4OgQ"],
+    ["هندسة 2", "BQACAgIAAxkBAAIBwGm8QepaThoaIg8neyQjKnZlZHHuAAJJpQACTejhSQsSUf3wWnmKOgQ"],
+    ["هندسة 3", "BQACAgIAAxkBAAIBwWm8QepclJJ449tn6QABQK2qlJMrpwACS6UAAk3o4UmeVRBMzzs6XzoE"],
+    ["هندسة 4", "BQACAgIAAxkBAAIBwmm8QerW30-7Xjlf3NizHS2LI8Z2AAJNpQACTejhSdfPLEVmdFlxOgQ"],
+    ["هندسة 5", "BQACAgIAAxkBAAIBw2m8QerQn4zgXOtsCXxwRaLbEJnqAAJRpQACTejhScuGrbeK68AeOgQ"],
+    ["هندسة 6", "BQACAgIAAxkBAAIBxGm8Qeoj2XV1KlSi6mw1S3w9AqIPAAJXpQACTejhSano2eOiS0l7OgQ"],
+    ["هندسة 7", "BQACAgIAAxkBAAIBxWm8Qeq1BqQfHBhN31RTLCZ5643AAJdpQACTejhSdguUkHhbIYOOgQ"],
+    ["هندسة 8", "BQACAgIAAxkBAAIBxmm8Qeq0FZpPRa6lI5tGXSbEEzHTAAJfpQACTejhST9TtJ6ZvcGWOgQ"],
+    ["هندسة 9", "BQACAgIAAxkBAAIBvmm8QeomzHbpqOq9w_z5-VUfjJqkAAJHpQACTejhSTkprNGcsN0eOgQ"]
+  ],
 
-    "📚 غيت": [
-      ["هندسة 1", "BQACAgIAAxkBAAIBv2m8QerIa6Rl9ONwAZn2b_0OPEVKAAJIpQACTejhSexyIatCBct4OgQ"],
-      ["هندسة 2", "BQACAgIAAxkBAAIBwGm8QepaThoaIg8neyQjKnZlZHHuAAJJpQACTejhSQsSUf3wWnmKOgQ"],
-      ["هندسة 3", "BQACAgIAAxkBAAIBwWm8QepclJJ449tn6QABQK2qlJMrpwACS6UAAk3o4UmeVRBMzzs6XzoE"],
-      ["هندسة 4", "BQACAgIAAxkBAAIBwmm8QerW30-7Xjlf3NizHS2LI8Z2AAJNpQACTejhSdfPLEVmdFlxOgQ"],
-      ["هندسة 5", "BQACAgIAAxkBAAIBw2m8QerQn4zgXOtsCXxwRaLbEJnqAAJRpQACTejhScuGrbeK68AeOgQ"],
-      ["هندسة 6", "BQACAgIAAxkBAAIBxGm8Qeoj2XV1KlSi6mw1S3w9AqIPAAJXpQACTejhSano2eOiS0l7OgQ"],
-      ["هندسة 7", "BQACAgIAAxkBAAIBxWm8Qeq1BqQfHBhN31RTLCZ5643AAJdpQACTejhSdguUkHhbIYOOgQ"],
-      ["هندسة 8", "BQACAgIAAxkBAAIBxmm8Qeq0FZpPRa6lI5tGXSbEEzHTAAJfpQACTejhST9TtJ6ZvcGWOgQ"]
-    ]
-  }
+  "📚 غيت": [
+    ["هندسة 1", "BQACAgIAAxkBAAIBv2m8QerIa6Rl9ONwAZn2b_0OPEVKAAJIpQACTejhSexyIatCBct4OgQ"],
+    ["هندسة 2", "BQACAgIAAxkBAAIBwGm8QepaThoaIg8neyQjKnZlZHHuAAJJpQACTejhSQsSUf3wWnmKOgQ"],
+    ["هندسة 3", "BQACAgIAAxkBAAIBwWm8QepclJJ449tn6QABQK2qlJMrpwACS6UAAk3o4UmeVRBMzzs6XzoE"],
+    ["هندسة 4", "BQACAgIAAxkBAAIBwmm8QerW30-7Xjlf3NizHS2LI8Z2AAJNpQACTejhSdfPLEVmdFlxOgQ"],
+    ["هندسة 5", "BQACAgIAAxkBAAIBw2m8QerQn4zgXOtsCXxwRaLbEJnqAAJRpQACTejhScuGrbeK68AeOgQ"],
+    ["هندسة 6", "BQACAgIAAxkBAAIBxGm8Qeoj2XV1KlSi6mw1S3w9AqIPAAJXpQACTejhSano2eOiS0l7OgQ"],
+    ["هندسة 7", "BQACAgIAAxkBAAIBxWm8Qeq1BqQfHBhN31RTLCZ5643AAJdpQACTejhSdguUkHhbIYOOgQ"],
+    ["هندسة 8", "BQACAgIAAxkBAAIBxmm8Qeq0FZpPRa6lI5tGXSbEEzHTAAJfpQACTejhST9TtJ6ZvcGWOgQ"]
+  ],
+
+  "📚 الدكتور باسل حسن": [
+    ["Lecture 2 - UML Use Case Diagram", "BQACAgQAAxkBAAIgeGnkZcCbQlVXVsq9MzD8u07CkaOfAAJvGwACGAKxUtu2Imw_KFloOwQ"],
+    ["Lecture 3 - Course Content & Introduction to SE", "BQACAgQAAxkBAAIgd2nkZcCw9JXOh7uOXXC2VZr_n8dOAALtHAACEANhUqnD0JbsSFAdOwQ"],
+    ["Lecture 3 - Software Processes", "BQACAgQAAxkBAAIgeWnkZcB3otEmppQ7f6exYEniued8AALxHgACJWsAAVMgCrLeZgfXeTsE"]
+  ]
+}
 
 },
 "🧠 نظرية التعقيد": {
