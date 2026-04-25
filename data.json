@@ -407,8 +407,12 @@
       ["شبكات 2","BQACAgIAAxkBAAIBMWm8NWhANCT5jQ1y86TPXrftRCK9AAKipAACTejhSXi7AW5qpOI2OgQ"],
       ["شبكات 3","BQACAgIAAxkBAAIBMmm8NWgVhdKEQ6jYfjSRHXS2IG1QAAKkpAACTejhSbPwBrGKZt73OgQ"],
       ["شبكات 4","BQACAgIAAxkBAAIBM2m8NWi-xVVJEn1GY1qR87SFVLp7AAKmpAACTejhSSd9Em0DEs4yOgQ"]
+    ],
+  "📚 الدكتور": [
+      ["شبكات 1","BQACAgQAAxkBAAIjAWntIjXjYG6kPvBNm2Dp7Ku6aFlHAAIUHwACgWOgUiww8-tQ5fRGOwQ"],
+      ["شبكات 2","BQACAgQAAxkBAAIjAmntIjWoUGCK9Jqr_LNHMSgImsehAAISHwACgWOgUq1AtERyYEZfOwQ"],
+      ["شبكات 3","BQACAgQAAxkBAAIjBGntIjZFJ46Pmj3A5aaF2GU8S8NsAAJcIAAC5xw4U1w-7N7o3OvmOwQ"]
     ]
-
   },
 
   "🧪 العملي": {
@@ -431,6 +435,9 @@
       ["عملي 4","BQACAgIAAxkBAAIBSmm8Nl1ykhUdmv7tMkzYJqOvTSEyAAK2pAACTejhSa2KVQoxW2wLOgQ"],
       ["عملي 5","BQACAgIAAxkBAAIBS2m8Nl1lSrgNtMxFYe4VMq-ZZ6VcAAK4pAACTejhSXdE6DoH-YRIOgQ"],
       ["عملي 6","BQACAgIAAxkBAAIBTGm8Nl2Rc26dxT1fViPS7tGef4YuAAK7pAACTejhSQ6BnbC1RQ7oOgQ"]
+    ],
+        "📚 الدكتور": [
+      ["عملي 1","BQACAgQAAxkBAAIjA2ntIjb3IkvxSfAD-czCDbAQOGkDAAJZHgACUyAhU4ZUawM06cXYOwQ"]
     ]
 
   }
@@ -461,6 +468,16 @@
       ["نظري 5","BQACAgIAAxkBAAP5abww3RD81vfKQMlRUZtIfi72rT0AAl6kAAJN6OFJIIzHJ9M3g2s6BA"],
       ["نظري 6","BQACAgIAAxkBAAP6abww3da1J-LacmoN1Wash_O_4EgAAl-kAAJN6OFJ-Ew4y6HMv4o6BA"],
       ["تتمة 3","BQACAgIAAxkBAAP7abww3Z-hYrwbu4uBoq5jUBDFY4YAAmCkAAJN6OFJjWGIOrQAAdoxOgQ"]
+    ],
+      "📚 الدكتور": [
+      ["نظري 1","BQACAgQAAxkBAAIi9WntIX5HybGakByRXIDF7vlNjxt9AAK1HQAC-6fwUiIVn_EotEu1OwQ"]
+    ]
+
+  },
+    "📄 العملي": {
+
+      "📚 الدكتور": [
+      ["عملي 1","BQACAgQAAxkBAAIi9mntIX5T1oT6A4s-S_pD5tVtTHokAAJ0NAAC1EMpU7FbIwZ7QX1zOwQ"]
     ]
 
   }
@@ -507,6 +524,10 @@
       ["عملي 6","BQACAgIAAxkBAAPuabwv8Ao9Xj3TVFp6lOsGcwABrx8sAAJQpAACTejhSUswLC7IsDz6OgQ"],
       ["تتمة","BQACAgIAAxkBAAPyabww3QABePjNjhTQpjIpfTeUZP6TAAJSpAACTejhSSfcRtyRO1enOgQ"],
       ["دورات","BQACAgIAAxkBAAPxabww3Q3VmFcNBihXnvJSQzE0CLgAAlOkAAJN6OFJOj6OiUlcGdA6BA"]
+    ],
+        "📚 الدكتور": [
+      ["1 عملي ","BQACAgQAAxkBAAIi52ntIJBSN3_m_gIWASFprPEAASQGGgACWRwAApYSYVNcFlTpYkf8_zsE"],
+      ["عملي 2","BQACAgQAAxkBAAIi6GntIJBWmdCusmH-pTjxZRuqmJf4AAJaHAAClhJhU255YcoKo69aOwQ"]
     ]
 
   }
