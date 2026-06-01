@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 # ========= إعدادات البوت =========
 TOKEN = os.getenv("TOKEN")
 ADMIN_ID = 7554028181
-DEVELOPER_USERNAME = "OBAID2_4"
+DEVELOPER_USERNAME = "Oday2_4"
 CHANNEL_USERNAME = "@It_2028"  # ← غيّر هذا لاسم قناتك
  
 # ========= قاعدة بيانات SQLite =========
